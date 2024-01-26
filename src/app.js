@@ -6,7 +6,7 @@ require("dotenv").config();
 const db = require("./db");
 
 var indexRouter = require("./routes/index");
-// import usersRouter from "./routes/users";
+var authRouter = require("./routes/auth.router");
 
 var app = express();
 
@@ -17,6 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 // app.use("/users", usersRouter);
 
 app.get("/test", (req, res, next) => {

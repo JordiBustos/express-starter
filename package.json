@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "node ./src/app.js --exec babel-node -e js"
+    "dev": "node --watch ./src/app.js --exec babel-node -e js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -16,6 +16,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^7.0.1",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
