@@ -11,7 +11,7 @@ To get started, follow these steps:
 Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/jordibustos/express-starter.git
+git clone https://github.com/JordiBustos/node-starter.git
 cd express-starter
 docker-compose build
 docker-compose up
