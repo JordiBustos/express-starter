@@ -1,6 +1,6 @@
-# Express Starter Project
+# Node Starter Project
 
-Welcome to the Express Starter Project! This project is designed to provide you with a solid foundation for building an Express.js site with pre-configured authentication/authorization processes, database models, and optional role-based access control.
+Welcome to the Node Starter Project! This project is designed to provide you with a solid foundation for building an Express.js site with pre-configured authentication/authorization processes, database models, and optional role-based access control.
 
 This project follows the MVC pattern.
 
@@ -12,7 +12,7 @@ Clone this repository to your local machine:
 
 ```bash
 git clone https://github.com/JordiBustos/node-starter.git
-cd express-starter
+cd node-starter
 docker-compose build
 docker-compose up
 ```
