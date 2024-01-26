@@ -21,12 +21,14 @@ docker-compose up
 
 Before running the application, make sure to set the following environment variables in a .env file at the root of the project:
 
+```bash
 DB_USER='postgres'
 DB_HOST='db'
 DB_NAME='db_name'
 DB_PASSWORD='password'
 DB_PORT=5432
 PORT=3000
+```
 
 ## Contributing
 
