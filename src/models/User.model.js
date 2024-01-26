@@ -20,7 +20,7 @@ const User = db.define(
 );
 
 db.sync()
-  .then(() => console.log("User table created"))
+  .then(() => console.log("Synced User model with database"))
   .catch((err) => console.log(err));
 
 module.exports = User;

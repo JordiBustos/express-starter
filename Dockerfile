@@ -1,5 +1,5 @@
 # Installs Node.js image
-FROM node:21-alpine3.18
+FROM node:21-slim
 
 # sets the working directory for any RUN, CMD, COPY command
 # all files we put in the Docker container running the server will be in /usr/src/app (e.g. /usr/src/app/package.json)

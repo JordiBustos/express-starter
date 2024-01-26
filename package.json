@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "node --watch ./src/app.js --exec babel-node -e js"
+    "dev": "node --watch ./src/app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
