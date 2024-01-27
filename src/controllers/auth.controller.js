@@ -1,5 +1,8 @@
 const User = require("../models/User.model");
-const { generateAccessToken } = require("../utils/auth");
+const {
+  generateAccessToken,
+  generateHashedPassword,
+} = require("../utils/auth");
 const bcrypt = require("bcrypt");
 
 /**
@@ -14,13 +17,10 @@ async function register(req, res) {
     const userExists = await User.findOne({ where: { username } });
     if (userExists) return res.status(400).send("User already exists");
 
-    const saltValue = bcrypt.genSaltSync(10);
-    const hashed = bcrypt.hashSync(String(password), saltValue);
-
     const user = await User.create({
       username,
-      password: hashed,
-      email,
+      password: generateHashedPassword(password),
+      email: email.toLowerCase(),
       role: "user",
     });
 
@@ -47,8 +47,10 @@ async function login(req, res) {
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
     const token = generateAccessToken(user);
-    res.status(200).json({ token });
+    const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
+    res.status(200).json({ token, expiresAt: expirationDate });
   } catch (error) {
+    console.error(error);
     res.status(500).send("Internal server error");
   }
 }

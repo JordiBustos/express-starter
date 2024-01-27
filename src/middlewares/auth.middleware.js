@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const body = require("express-validator");
+const { body } = require("express-validator");
 
 /**
  * Verify token
@@ -16,7 +16,7 @@ function verifyToken(req, res, next) {
     return res.status(401).send("Access denied. No token provided.");
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) return res.status(403).send("Invalid token.");
       req.user = user;
       next();
@@ -33,7 +33,7 @@ function verifyToken(req, res, next) {
 function validateRegister() {
   return [
     body("username").trim().notEmpty().escape(),
-    body("password").trim().notEmpty().espace(),
+    body("password").trim().notEmpty().escape(),
     body("email").notEmpty().isEmail().escape(),
   ];
 }
@@ -45,7 +45,7 @@ function validateRegister() {
 function validateLogin() {
   return [
     body("username").trim().notEmpty().escape(),
-    body("password").trim().notEmpty().espace(),
+    body("password").trim().notEmpty().escape(),
   ];
 }
 
