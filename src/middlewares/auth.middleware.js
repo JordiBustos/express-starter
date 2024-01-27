@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
 const { body, param } = require("express-validator");
+const Token = require("../models/Token.model");
+const User = require("../models/User.model");
 
 /**
- * Verify token
+ * Verify token continue to next route or return error response
  * @param {Request} req
  * @param {Response} res
  * @param {Function} next
- * @returns {Object} response
+ * @returns {null || Object} null or error response
  */
 function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -19,6 +21,18 @@ function verifyToken(req, res, next) {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) return res.status(403).send("Invalid token.");
       req.user = user;
+
+      const isTokenValid = Token.findOne({
+        where: { token, userId: user.id },
+      });
+      if (!isTokenValid || isTokenValid.expirationAt.before(new Date.now())) {
+        User.update(
+          { isActive: false },
+          { where: { username: user.username } }
+        );
+        return res.status(403).send("Invalid token.");
+      }
+
       next();
     });
   } catch (error) {
@@ -33,7 +47,20 @@ function verifyToken(req, res, next) {
 function validateRegister() {
   return [
     body("username").trim().notEmpty().escape(),
-    body("password").trim().notEmpty().escape(),
+    body("password")
+      .trim()
+      .notEmpty()
+      .escape()
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long.")
+      .matches(/\d/)
+      .withMessage("Password must contain a number.")
+      .matches(/[A-Z]/)
+      .withMessage("Password must contain an uppercase letter.")
+      .matches(/[a-z]/)
+      .withMessage("Password must contain a lowercase letter.")
+      .matches(/[!@#$%^&*(),.?":{}|<>]/)
+      .withMessage("Password must contain a special character."),
     body("email").notEmpty().isEmail().escape(),
   ];
 }
@@ -68,10 +95,15 @@ function validateAccountInformation() {
   return [param("username").trim().notEmpty().escape()];
 }
 
+function validateLogout() {
+  return [body("username").trim().notEmpty().escape()];
+}
+
 module.exports = {
   verifyToken,
   validateRegister,
   validateLogin,
   validateReestablishPassword,
   validateAccountInformation,
+  validateLogout,
 };

@@ -1,4 +1,6 @@
 const Sequelize = require("sequelize");
+const User = require("./models/User.model");
+const Token = require("./models/Token.model");
 
 const db = new Sequelize({
   database: process.env.DB_NAME,
@@ -11,5 +13,8 @@ const db = new Sequelize({
 db.authenticate()
   .then(() => console.log("Connected to DB"))
   .catch((err) => console.log(err));
+
+User.hasOne(Token, { foreignKey: "userId", as: "token" });
+Token.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 module.exports = db;

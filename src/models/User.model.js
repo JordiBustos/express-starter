@@ -47,14 +47,22 @@ const User = db.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    displayName: {
+      type: DataTypes.STRING,
+      defaultValue: "",
+    },
+    profileImage: {
+      type: DataTypes.STRING,
+      defaultValue: "",
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     timestamps: false,
   }
 );
-
-db.sync()
-  .then(() => console.log("Synced User model with database"))
-  .catch((err) => console.log(err));
 
 module.exports = User;

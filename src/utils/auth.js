@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User.model");
+const nodeMailer = require("nodemailer");
 
 /**
  * Generate access token
@@ -43,6 +44,29 @@ async function getUserByUsername(username) {
   } catch (error) {
     console.error(error);
     return null;
+  }
+}
+
+async function sendEmail(from, to, subject, text) {
+  try {
+    const transporter = nodeMailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    return await transporter.sendMail({
+      from,
+      to,
+      subject,
+      text,
+    });
+  } catch (err) {
+    console.error(err);
   }
 }
 

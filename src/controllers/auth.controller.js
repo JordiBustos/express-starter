@@ -1,4 +1,5 @@
 const User = require("../models/User.model");
+const Token = require("../models/Token.model");
 const {
   generateAccessToken,
   generateHashedPassword,
@@ -27,6 +28,11 @@ async function register(req, res) {
     });
 
     const response = generateAccessToken(user);
+    await Token.create({
+      token: response.token,
+      userId: user.id,
+      expiresAt: response.expirationDate,
+    });
     res.status(201).json(response);
   } catch (err) {
     console.error(err);
@@ -54,9 +60,27 @@ async function login(req, res) {
     );
 
     const response = generateAccessToken(user);
+    await Token.create({ token: response.token, userId: user.id });
+    res.cookie("token", response.token, {
+      httpOnly: true,
+      expires: response.expirationDate,
+    });
     res.status(200).json(response);
   } catch (error) {
     console.error(error);
+    res.status(500).send("Internal server error");
+  }
+}
+
+async function logout(req, res) {
+  try {
+    const { username } = req.user;
+    await User.update({ isActive: false }, { where: { username } });
+    await Token.destroyy({ where: { userId: req.user.id } });
+    res.clearCookie("token");
+    res.status(200).send("Logout successful");
+  } catch (err) {
+    console.error(err);
     res.status(500).send("Internal server error");
   }
 }
@@ -108,4 +132,5 @@ module.exports = {
   login,
   reestablishPassword,
   getAccountInformation,
+  logout,
 };
