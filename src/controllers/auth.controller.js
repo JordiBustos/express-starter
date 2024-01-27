@@ -48,6 +48,11 @@ async function login(req, res) {
     const isValidPassword = bcrypt.compareSync(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
+    await User.update(
+      { lastLogin: new Date(), isActive: true },
+      { where: { username } }
+    );
+
     const response = generateAccessToken(user);
     res.status(200).json(response);
   } catch (error) {

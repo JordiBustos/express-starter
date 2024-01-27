@@ -37,3 +37,10 @@ If you encounter issues or have suggestions for improvement, feel free to open a
 ## License
 
 This project is licensed under the MIT License.
+
+### TODO
+
+- Set isActive to false when logout
+- Implement roles for users
+- Implement permissions system based on role assigned to user
+- UI as django admin?
