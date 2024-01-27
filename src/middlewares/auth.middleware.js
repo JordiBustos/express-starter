@@ -11,6 +11,10 @@ const User = require("../models/User.model");
  * @returns {null || Object} null or error response
  */
 function verifyToken(req, res, next) {
+  async function updateUser(User, id) {
+    await User.update({ isActive: false }, { where: { id } });
+    return res.status(403).send("Invalid token.");
+  } 
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
@@ -20,27 +24,15 @@ function verifyToken(req, res, next) {
   try {
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
       if (err) return res.status(403).send("Invalid token.");
-      if (user.exp <= Date.now() / 1000) {
-        User.update(
-          { isActive: false },
-          { where: { username: user.username } }
-        );
-        return res.status(403).send("Invalid token.");
-      }
+      if (user.exp <= Date.now() / 1000) return updateUser(User, user.id);
       req.user = user;
       let tokenDb = await Token.findAll({
-        limit: 1,
+        limit: 1, // same as findOne but ordered by createdAt
         order: [["createdAt", "DESC"]],
         where: { token, userId: user.id },
       });
 
-      if (!tokenDb) {
-        User.update(
-          { isActive: false },
-          { where: { username: user.username } }
-        );
-        return res.status(403).send("Invalid token.");
-      }
+      if (!tokenDb) return res.status(403).send("Invalid token.");
 
       tokenDb = tokenDb[0].dataValues;
 
@@ -49,9 +41,8 @@ function verifyToken(req, res, next) {
       const expirationDate = tokenDb.createdAt.getTime() + 60 * 60 * 1000;
 
       if (!matchesIssuedAt || Date.now() > expirationDate) {
-        User.update({ isActive: false }, { where: { id: user.id } });
-        Token.destroy({ where: { token } });
-        return res.status(403).send("Invalid token.");
+        await Token.destroy({ where: { token } });
+        return updateUser(User, user.id);
       }
 
       next();

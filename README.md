@@ -28,6 +28,7 @@ DB_NAME='db_name'
 DB_PASSWORD='password'
 DB_PORT=5432
 PORT=3000
+JWT_SECRET=1234
 ```
 
 ## Contributing
