@@ -91,13 +91,12 @@ async function reestablishPassword(req, res) {
  * @param {Response} res
  */
 async function getAccountInformation(req, res) {
-  const { username } = req.params;
+  const { username } = req.query;
 
   try {
-    const user = getUserByUsername(username);
+    const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
-
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal server error");
