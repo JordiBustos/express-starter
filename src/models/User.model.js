@@ -9,10 +9,44 @@ const User = db.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    email: DataTypes.STRING,
-    role: DataTypes.STRING,
+    username: {
+      type: DataTypes.STRING,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      required: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      required: true,
+      unique: true,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "user",
+    },
+
+    lastLogin: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     timestamps: false,

@@ -2,6 +2,12 @@ const User = require("../models/User.model");
 const { generateAccessToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
 
+/**
+ * Register user controller with username, password and email
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} json web token or error message
+ */
 async function register(req, res) {
   try {
     const { username, password, email } = req.body;
@@ -26,6 +32,12 @@ async function register(req, res) {
   }
 }
 
+/**
+ * login user controller with username and password
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} json web token or error message
+ */
 async function login(req, res) {
   try {
     const { username, password } = req.body;

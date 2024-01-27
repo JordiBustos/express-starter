@@ -1,6 +1,14 @@
 const jwt = require("jsonwebtoken");
+const body = require("express-validator");
 
-const verifyToken = (req, res, next) => {
+/**
+ * Verify token
+ * @param {Request} req
+ * @param {Response} res
+ * @param {Function} next
+ * @returns {Object} response
+ */
+function verifyToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
@@ -16,6 +24,33 @@ const verifyToken = (req, res, next) => {
   } catch (error) {
     return res.status(400).send("Invalid token.");
   }
-};
+}
 
-module.exports = verifyToken;
+/**
+ * Validate register
+ * @returns {Array} array of validation rules
+ */
+function validateRegister() {
+  return [
+    body("username").trim().notEmpty().escape(),
+    body("password").trim().notEmpty().espace(),
+    body("email").notEmpty().isEmail().escape(),
+  ];
+}
+
+/**
+ * Validate login
+ * @returns {Array} array of validation rules
+ */
+function validateLogin() {
+  return [
+    body("username").trim().notEmpty().escape(),
+    body("password").trim().notEmpty().espace(),
+  ];
+}
+
+module.exports = {
+  verifyToken,
+  validateRegister,
+  validateLogin,
+};
