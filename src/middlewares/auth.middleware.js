@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 /**
  * Verify token
@@ -49,8 +49,29 @@ function validateLogin() {
   ];
 }
 
+/**
+ * Validate reestablish password
+ * @returns {Array} array of validation rules
+ */
+function validateReestablishPassword() {
+  return [
+    body("email").notEmpty().isEmail().escape(),
+    body("password").trim().notEmpty().escape(),
+  ];
+}
+
+/**
+ * Validate account information
+ * @returns {Array} array of validation rules
+ */
+function validateAccountInformation() {
+  return [param("username").trim().notEmpty().escape()];
+}
+
 module.exports = {
   verifyToken,
   validateRegister,
   validateLogin,
+  validateReestablishPassword,
+  validateAccountInformation,
 };

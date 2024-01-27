@@ -18,10 +18,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
-// app.use("/users", usersRouter);
 
-app.get("/test", (req, res, next) => {
-  res.send("hi");
+app.get("/health", (req, res, next) => {
+  res.send("Server is running...");
 });
 
 db.sync()

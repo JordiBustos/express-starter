@@ -2,6 +2,7 @@ const User = require("../models/User.model");
 const {
   generateAccessToken,
   generateHashedPassword,
+  getUserByUsername,
 } = require("../utils/auth");
 const bcrypt = require("bcrypt");
 
@@ -14,7 +15,8 @@ const bcrypt = require("bcrypt");
 async function register(req, res) {
   try {
     const { username, password, email } = req.body;
-    const userExists = await User.findOne({ where: { username } });
+
+    const userExists = await getUserByUsername(username);
     if (userExists) return res.status(400).send("User already exists");
 
     const user = await User.create({
@@ -24,8 +26,8 @@ async function register(req, res) {
       role: "user",
     });
 
-    const token = generateAccessToken(user);
-    res.status(201).json({ token });
+    const response = generateAccessToken(user);
+    res.status(201).json(response);
   } catch (err) {
     console.error(err);
     res.status(500).send("Error creating user");
@@ -41,16 +43,58 @@ async function register(req, res) {
 async function login(req, res) {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ where: { username } });
+    const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
     const isValidPassword = bcrypt.compareSync(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
-    const token = generateAccessToken(user);
-    const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
-    res.status(200).json({ token, expiresAt: expirationDate });
+    const response = generateAccessToken(user);
+    res.status(200).json(response);
   } catch (error) {
     console.error(error);
+    res.status(500).send("Internal server error");
+  }
+}
+
+/**
+ * TODO add email service to validate code and continue
+ * Allows user to reestablish password with email
+ * @param {Request} req
+ * @param {Response} res
+ */
+async function reestablishPassword(req, res) {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(404).send("User not found");
+
+    const hashedPassword = generateHashedPassword(password);
+    await User.update({ password: hashedPassword }, { where: { email } });
+
+    const response = generateAccessToken(user);
+    res.status(200).json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+}
+
+/**
+ * Get user account information based on username query param
+ * @param {Request} req
+ * @param {Response} res
+ */
+async function getAccountInformation(req, res) {
+  const { username } = req.params;
+
+  try {
+    const user = getUserByUsername(username);
+    if (!user) return res.status(404).send("User not found");
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error(err);
     res.status(500).send("Internal server error");
   }
 }
@@ -58,4 +102,6 @@ async function login(req, res) {
 module.exports = {
   register,
   login,
+  reestablishPassword,
+  getAccountInformation,
 };

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const User = require("../models/User.model");
 
 /**
  * Generate access token
@@ -7,9 +8,15 @@ const bcrypt = require("bcrypt");
  * @returns {String} access token
  */
 function generateAccessToken(user) {
-  return jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+  const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
+
+  return {
+    token,
+    expiresAt: expirationDate,
+  };
 }
 
 /**
@@ -24,7 +31,23 @@ function generateHashedPassword(password) {
   return hashed;
 }
 
+/**
+ * Get user by username
+ * @param {String} username
+ * @returns {User} user
+ */
+async function getUserByUsername(username) {
+  try {
+    const user = await User.findOne({ where: { username } });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 module.exports = {
   generateHashedPassword,
   generateAccessToken,
+  getUserByUsername,
 };
