@@ -31,7 +31,6 @@ async function register(req, res) {
     await Token.create({
       token: response.token,
       userId: user.id,
-      expiresAt: response.expirationDate,
     });
     res.status(201).json(response);
   } catch (err) {
@@ -60,7 +59,10 @@ async function login(req, res) {
     );
 
     const response = generateAccessToken(user);
-    await Token.create({ token: response.token, userId: user.id });
+    await Token.create({
+      token: response.token,
+      userId: user.id,
+    });
     res.cookie("token", response.token, {
       httpOnly: true,
       expires: response.expirationDate,

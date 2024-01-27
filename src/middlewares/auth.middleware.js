@@ -18,18 +18,38 @@ function verifyToken(req, res, next) {
     return res.status(401).send("Access denied. No token provided.");
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
       if (err) return res.status(403).send("Invalid token.");
-      req.user = user;
-
-      const isTokenValid = Token.findOne({
-        where: { token, userId: user.id },
-      });
-      if (!isTokenValid || isTokenValid.expirationAt.before(new Date.now())) {
+      if (user.exp <= Date.now() / 1000) {
         User.update(
           { isActive: false },
           { where: { username: user.username } }
         );
+        return res.status(403).send("Invalid token.");
+      }
+      req.user = user;
+      let tokenDb = await Token.findAll({
+        limit: 1,
+        order: [["createdAt", "DESC"]],
+        where: { token, userId: user.id },
+      });
+
+      if (!tokenDb) {
+        User.update(
+          { isActive: false },
+          { where: { username: user.username } }
+        );
+        return res.status(403).send("Invalid token.");
+      }
+
+      tokenDb = tokenDb[0].dataValues;
+
+      const matchesIssuedAt =
+        tokenDb.createdAt.getTime() - user.iat * 1000 < 1000; // might be some ms off
+      const expirationDate = tokenDb.createdAt.getTime() + 60 * 60 * 1000;
+
+      if (!matchesIssuedAt || Date.now() > expirationDate) {
+        User.update({ isActive: false }, { where: { id: user.id } });
         return res.status(403).send("Invalid token.");
       }
 

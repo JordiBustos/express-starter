@@ -8,6 +8,9 @@ const db = require("./db");
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth.router");
 
+const User = require("./models/User.model");
+const Token = require("./models/Token.model");
+
 var app = express();
 
 app.use(logger("dev"));
@@ -23,6 +26,10 @@ app.get("/health", (req, res, next) => {
   res.send("Server is running...");
 });
 
+db.authenticate()
+  .then(() => console.log("Connected to DB"))
+  .catch((err) => console.log(err));
+
 db.sync()
   .then(() => console.log("Database connected"))
   .catch((err) => console.log(err));
@@ -30,3 +37,6 @@ db.sync()
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at ${process.env.PORT}`);
 });
+
+User.hasOne(Token, { foreignKey: "userId", as: "token" });
+Token.belongsTo(User, { foreignKey: "userId", as: "user" });

@@ -24,10 +24,6 @@ const Token = db.define(
         key: "id",
       },
     },
-    expirationAt: {
-      type: DataTypes.DATE,
-      required: true,
-    },
   },
   {
     timestamps: true,
