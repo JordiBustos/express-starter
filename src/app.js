@@ -3,13 +3,11 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 require("dotenv").config();
-const db = require("./db");
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth.router");
 
-const User = require("./models/User.model");
-const Token = require("./models/Token.model");
+const db = require("./db");
 
 var app = express();
 
@@ -37,6 +35,3 @@ db.sync()
 app.listen(process.env.PORT, () => {
   console.log(`Server is running at ${process.env.PORT}`);
 });
-
-User.hasOne(Token, { foreignKey: "userId", as: "token" });
-Token.belongsTo(User, { foreignKey: "userId", as: "user" });

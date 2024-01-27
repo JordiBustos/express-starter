@@ -14,7 +14,7 @@ function verifyToken(req, res, next) {
   async function updateUser(User, id) {
     await User.update({ isActive: false }, { where: { id } });
     return res.status(403).send("Invalid token.");
-  } 
+  }
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
@@ -50,6 +50,19 @@ function verifyToken(req, res, next) {
   } catch (error) {
     return res.status(400).send("Invalid token.");
   }
+}
+
+/**
+ * Verify permissions
+ * @param {User} user
+ * @param {String} action
+ * @returns {Function | Response} middleware || error response
+ */
+function verifyPermissions(user, action) {
+  return (req, res, next) => {
+    if (user.role.permissions.includes(action)) next();
+    else return res.status(403).send("You don't have permission.");
+  };
 }
 
 /**
@@ -112,10 +125,11 @@ function validateLogout() {
 }
 
 module.exports = {
-  verifyToken,
-  validateRegister,
-  validateLogin,
-  validateReestablishPassword,
   validateAccountInformation,
+  validateLogin,
   validateLogout,
+  validateRegister,
+  validateReestablishPassword,
+  verifyPermissions,
+  verifyToken,
 };
