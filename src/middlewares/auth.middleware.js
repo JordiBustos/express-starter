@@ -50,6 +50,7 @@ function verifyToken(req, res, next) {
 
       if (!matchesIssuedAt || Date.now() > expirationDate) {
         User.update({ isActive: false }, { where: { id: user.id } });
+        Token.destroy({ where: { token } });
         return res.status(403).send("Invalid token.");
       }
 
