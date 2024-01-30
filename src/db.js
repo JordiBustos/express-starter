@@ -8,8 +8,4 @@ const db = new Sequelize({
   dialect: "postgres",
 });
 
-db.authenticate()
-  .then(() => console.log("Connected to DB"))
-  .catch((err) => console.log(err));
-
 module.exports = db;

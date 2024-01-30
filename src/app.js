@@ -3,10 +3,12 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 require("dotenv").config();
-const db = require("./db");
 
 var indexRouter = require("./routes/index");
-// import usersRouter from "./routes/users";
+var authRouter = require("./routes/auth.router");
+var rolesRouter = require("./routes/role.router");
+
+const db = require("./db");
 
 var app = express();
 
@@ -17,11 +19,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-// app.use("/users", usersRouter);
+app.use("/auth", authRouter);
+app.use("/roles", rolesRouter);
 
-app.get("/test", (req, res, next) => {
-  res.send("hi");
+app.get("/health", (req, res, next) => {
+  res.send("Server is running...");
 });
+
+db.authenticate()
+  .then(() => console.log("Connected to DB"))
+  .catch((err) => console.log(err));
 
 db.sync()
   .then(() => console.log("Database connected"))

@@ -28,6 +28,7 @@ DB_NAME='db_name'
 DB_PASSWORD='password'
 DB_PORT=5432
 PORT=3000
+JWT_SECRET=1234
 ```
 
 ## Contributing
@@ -37,3 +38,11 @@ If you encounter issues or have suggestions for improvement, feel free to open a
 ## License
 
 This project is licensed under the MIT License.
+
+### TODO
+
+- Set isActive to false when logout
+- Create email validation
+- Implement roles for users
+- Implement permissions system based on role assigned to user
+- UI as django admin?
