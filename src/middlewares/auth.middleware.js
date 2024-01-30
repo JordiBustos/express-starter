@@ -15,6 +15,7 @@ function verifyToken(req, res, next) {
     await User.update({ isActive: false }, { where: { id } });
     return res.status(403).send("Invalid token.");
   }
+
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
@@ -65,8 +66,7 @@ function verifyPermissions(user, action) {
   };
 }
 
-/**
- * Validate register
+/** Validate register
  * @returns {Array} array of validation rules
  */
 function validateRegister() {

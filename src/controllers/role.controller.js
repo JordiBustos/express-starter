@@ -1,4 +1,4 @@
-const Role = require("../models/Role");
+const Role = require("../models/Role.model");
 
 async function createRole(req, res) {
   const { role, permissions } = req.body;
@@ -56,7 +56,7 @@ async function updateRole(req, res) {
   try {
     const updatedRole = await Role.update(
       { role, permissions },
-      { where: { id } }
+      { where: { id } },
     );
 
     if (!updatedRole) {

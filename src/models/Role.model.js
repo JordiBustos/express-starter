@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const db = require("../db");
 
 const Role = db.define(
+  "role",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -20,7 +21,7 @@ const Role = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = Role;

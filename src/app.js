@@ -6,6 +6,7 @@ require("dotenv").config();
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth.router");
+var rolesRouter = require("./routes/role.router");
 
 const db = require("./db");
 
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use("/roles", rolesRouter);
 
 app.get("/health", (req, res, next) => {
   res.send("Server is running...");

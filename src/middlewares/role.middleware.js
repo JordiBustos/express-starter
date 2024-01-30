@@ -1,4 +1,4 @@
-const { body, params } = require("express-validator");
+const { body, param } = require("express-validator");
 
 function validateRoleCreation() {
   return [
@@ -12,14 +12,12 @@ function validateRoleCreation() {
 }
 
 function validateRoleDelete() {
-  return [
-    params("id").exists().withMessage("Id is required").trim().notEmpty(),
-  ];
+  return [param("id").exists().withMessage("Id is required").trim().notEmpty()];
 }
 
 function validateRoleName() {
   return [
-    params("role").exists().withMessage("Role is required").trim().notEmpty(),
+    param("role").exists().withMessage("Role is required").trim().notEmpty(),
   ];
 }
 

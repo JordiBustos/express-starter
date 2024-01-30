@@ -23,7 +23,7 @@ async function register(req, res) {
     const user = await User.create({
       username,
       password: generateHashedPassword(password),
-      email: email.toLowerCase(),
+      // email: email.toLowerCase(),
       role: "user",
     });
 
@@ -55,7 +55,7 @@ async function login(req, res) {
 
     await User.update(
       { lastLogin: new Date(), isActive: true },
-      { where: { username } }
+      { where: { username } },
     );
 
     const response = generateAccessToken(user);
