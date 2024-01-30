@@ -4,7 +4,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var limiter = require("./constants/limiter");
 require("dotenv").config();
-
+const connectRedis = require("./utils/connectRedis");
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth.router");
 var rolesRouter = require("./routes/role.router");
@@ -24,8 +24,22 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/roles", rolesRouter);
 
-app.get("/health", (req, res, next) => {
+app.get("/health", (_, res) => {
   res.send("Server is running...");
+});
+
+app.get("/redis-health", async (req, res) => {
+  try {
+    const client = req.app.locals.client;
+    await client.set("key", "value");
+    const value = await client.get("key");
+    if (value === "value") {
+      await client.del("key");
+      return res.status(200).send(`Redis is running (${value})`);
+    }
+  } catch (err) {
+    res.status(500).send(`Redis is not running: ${err}`);
+  }
 });
 
 db.authenticate()
@@ -36,6 +50,11 @@ db.sync()
   .then(() => console.log("Database connected"))
   .catch((err) => console.log(err));
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
+  try {
+    app.locals.client = await connectRedis();
+  } catch (err) {
+    console.log(`Redis was not connect due to: ${err}`);
+  }
   console.log(`Server is running at ${process.env.PORT}`);
 });

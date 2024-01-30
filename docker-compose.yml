@@ -8,6 +8,7 @@ services:
       - ${PORT}:${PORT}
     depends_on:
       - db
+      - redis
     volumes:
       - .:/usr/src/app
 
@@ -22,5 +23,16 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
 
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:${REDIS_PORT}"
+    volumes:
+      - data:/data/redis
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DATABASES=${REDIS_DATABASES}
 volumes:
   data: {}
