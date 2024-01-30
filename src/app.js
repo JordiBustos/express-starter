@@ -2,6 +2,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var connectRedis = require("./utils/connectRedis");
 require("dotenv").config();
 
 var indexRouter = require("./routes/index");
@@ -22,8 +23,17 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/roles", rolesRouter);
 
-app.get("/health", (req, res, next) => {
+app.get("/health", (_, res) => {
   res.send("Server is running...");
+});
+
+const { createClient } = require("redis");
+
+app.get("/redis-health", async (_, res) => {
+  await redisClient.set("foo", "bar");
+  const value = redisClient.get("foo");
+  redisClient.del("foo");
+  res.send(`Redis is running: ${value}`);
 });
 
 db.authenticate()
@@ -35,5 +45,6 @@ db.sync()
   .catch((err) => console.log(err));
 
 app.listen(process.env.PORT, () => {
+  const redisClient = connectRedis();
   console.log(`Server is running at ${process.env.PORT}`);
 });
