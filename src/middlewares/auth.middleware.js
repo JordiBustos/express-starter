@@ -60,7 +60,7 @@ function verifyToken(req, res, next) {
  * @returns {Function | Response} middleware || error response
  */
 function verifyPermissions(user, action) {
-  return (req, res, next) => {
+  return (_, res, next) => {
     if (user.role.permissions.includes(action)) next();
     else return res.status(403).send("You don't have permission.");
   };
@@ -120,6 +120,10 @@ function validateAccountInformation() {
   return [param("username").trim().notEmpty().escape()];
 }
 
+/**
+ * Validate logout
+ * @returns {Array} array of validation rules
+ */
 function validateLogout() {
   return [body("username").trim().notEmpty().escape()];
 }

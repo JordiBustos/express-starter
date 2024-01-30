@@ -74,11 +74,17 @@ async function login(req, res) {
   }
 }
 
+/**
+ * Logout user controller. Remove all tokens in the user Tokens, clear token cookie, and set isActive to false.
+ * @param {Request} req
+ * @param {Response} res
+ * retrun {Response} 200 if logout is successful else 500
+ */
 async function logout(req, res) {
   try {
     const { username } = req.user;
     await User.update({ isActive: false }, { where: { username } });
-    await Token.destroyy({ where: { userId: req.user.id } });
+    await Token.destroy({ where: { userId: req.user.id } });
     res.clearCookie("token");
     res.status(200).send("Logout successful");
   } catch (err) {

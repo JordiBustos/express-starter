@@ -1,5 +1,11 @@
 const Role = require("../models/Role.model");
 
+/**
+ * Create role controller with role and permissions
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} 200 role created or error message
+ */
 async function createRole(req, res) {
   const { role, permissions } = req.body;
   try {
@@ -19,6 +25,12 @@ async function createRole(req, res) {
   }
 }
 
+/**
+ * Get all roles controller
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} 200 roles found or error message
+ */
 async function getAllRoles(req, res) {
   try {
     const roles = await Role.findAll();
@@ -34,6 +46,12 @@ async function getAllRoles(req, res) {
   }
 }
 
+/**
+ * Delete role controller
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} 200 role deleted or error message
+ */
 async function deleteRole(req, res) {
   const { id } = req.params;
   try {
@@ -50,6 +68,12 @@ async function deleteRole(req, res) {
   }
 }
 
+/**
+ * Update role controller
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} 200 role updated or error message
+ */
 async function updateRole(req, res) {
   const { id } = req.params;
   const { role, permissions } = req.body;
@@ -70,6 +94,12 @@ async function updateRole(req, res) {
   }
 }
 
+/**
+ * Get role by role name controller
+ * @param {Request} req
+ * @param {Response} res
+ * @returns {String} 200 role found or error message
+ */
 async function getRoleByRoleName(req, res) {
   const { role } = req.params;
   try {
