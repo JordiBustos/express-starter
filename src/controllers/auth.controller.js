@@ -23,7 +23,7 @@ async function register(req, res) {
     const user = await User.create({
       username,
       password: generateHashedPassword(password),
-      // email: email.toLowerCase(),
+      email: email.toLowerCase(),
       role: "user",
     });
 
