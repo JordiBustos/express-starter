@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const db = require("../db");
+import { DataTypes } from "sequelize";
+import { db } from "../db.js";
 
-const User = db.define(
+export const User = db.define(
   "Users",
   {
     id: {
@@ -104,5 +104,3 @@ async function insertMockUser() {
 }
 
 insertMockUser();
-
-module.exports = User;

@@ -1,4 +1,4 @@
-const Role = require("../models/Role.model");
+import { Role } from "../models/Role.model.js";
 
 /**
  * Create role controller with role and permissions
@@ -31,7 +31,7 @@ async function createRole(req, res) {
  * @param {Response} res
  * @returns {String} 200 roles found or error message
  */
-async function getAllRoles(req, res) {
+async function getAllRoles(res) {
   try {
     const roles = await Role.findAll();
 
@@ -116,10 +116,4 @@ async function getRoleByRoleName(req, res) {
   }
 }
 
-module.exports = {
-  createRole,
-  getAllRoles,
-  deleteRole,
-  updateRole,
-  getRoleByRoleName,
-};
+export { createRole, getAllRoles, deleteRole, updateRole, getRoleByRoleName };

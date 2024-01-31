@@ -1,9 +1,9 @@
-const User = require("./models/User.model");
-const Token = require("./models/Token.model");
-const Role = require("./models/Role.model");
+import Role, { hasMany } from "./models/Role.model.js";
+import Token, { belongsTo as _belongsTo } from "./models/Token.model.js";
+import User, { hasOne, belongsTo } from "./models/User.model.js";
 
-User.hasOne(Token, { foreignKey: "userId", as: "token" });
-Token.belongsTo(User, { foreignKey: "userId", as: "user" });
+hasOne(Token, { foreignKey: "userId", as: "token" });
+_belongsTo(User, { foreignKey: "userId", as: "user" });
 
-Role.hasMany(User, { foreignKey: "roleId", as: "users" });
-User.belongsTo(Role, { foreignKey: "roleId", as: "role" });
+hasMany(User, { foreignKey: "roleId", as: "users" });
+belongsTo(Role, { foreignKey: "roleId", as: "role" });

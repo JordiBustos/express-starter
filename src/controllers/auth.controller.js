@@ -1,11 +1,11 @@
-const User = require("../models/User.model");
-const Token = require("../models/Token.model");
-const {
+import { User } from "../models/User.model.js";
+import Token from "../models/Token.model.js";
+import {
   generateAccessToken,
   generateHashedPassword,
   getUserByUsername,
-} = require("../utils/auth");
-const bcrypt = require("bcrypt");
+} from "../utils/auth.js";
+import { compareSync } from "bcrypt";
 
 /**
  * Register user controller with username, password and email
@@ -57,7 +57,7 @@ async function login(req, res) {
     const { username, password } = req.body;
     const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
-    const isValidPassword = bcrypt.compareSync(password, user.password);
+    const isValidPassword = compareSync(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
     await User.update(
@@ -142,10 +142,4 @@ async function getAccountInformation(req, res) {
   }
 }
 
-module.exports = {
-  register,
-  login,
-  reestablishPassword,
-  getAccountInformation,
-  logout,
-};
+export { register, login, reestablishPassword, getAccountInformation, logout };

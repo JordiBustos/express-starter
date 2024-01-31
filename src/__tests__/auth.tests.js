@@ -1,10 +1,10 @@
-const {
+import {
   generateHashedPassword,
   generateAccessToken,
   getUserByUsername,
-} = require("../utils/auth.js");
-const bcrypt = require("bcrypt");
-const { User } = require("../models/User.model");
+} from "../utils/auth.js";
+import { compareSync } from "bcrypt";
+import { User } from "../models/User.model";
 
 // Mock User object for testing
 const mockUser = {
@@ -27,7 +27,7 @@ describe("Authentication Utils Functions", () => {
     it("should generate a hashed password", () => {
       const password = "testpassword";
       const hashedPassword = generateHashedPassword(password);
-      const isSimilar = bcrypt.compareSync(password, hashedPassword);
+      const isSimilar = compareSync(password, hashedPassword);
       expect(hashedPassword).toBeDefined();
       expect(hashedPassword).not.toEqual(password);
       expect(isSimilar).toBe(true);

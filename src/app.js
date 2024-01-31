@@ -1,15 +1,14 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var limiter = require("./constants/limiter");
-require("dotenv").config();
-const connectRedis = require("./utils/connectRedis");
-var indexRouter = require("./routes/index");
-var authRouter = require("./routes/auth.router");
-var rolesRouter = require("./routes/role.router");
-
-const db = require("./db");
+import express from "express";
+import path from "path";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import { limiter } from "./constants/limiter.js";
+import "dotenv/config";
+import connectRedis from "./utils/connectRedis.js";
+import indexRouter from "./routes/index.js";
+import authRouter from "./routes/auth.router.js";
+import rolesRouter from "./routes/role.router.js";
+import { db } from "./db.js";
 
 var app = express();
 
@@ -18,6 +17,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
