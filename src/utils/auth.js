@@ -1,4 +1,4 @@
-import sign from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { genSaltSync, hashSync } from "bcrypt";
 import { User } from "../models/User.model.js";
 import { createTransport } from "nodemailer";
@@ -10,7 +10,7 @@ import { createTransport } from "nodemailer";
  */
 export function generateAccessToken(user) {
   const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
-  const token = sign({ id: user.id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
 
