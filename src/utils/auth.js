@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User.model");
-const nodeMailer = require("nodemailer");
-
+const nodemailer = require("nodemailer");
 /**
  * Generate access token
  * @param {User} user
@@ -49,7 +48,7 @@ async function getUserByUsername(username) {
 
 async function sendEmail(from, to, subject, text) {
   try {
-    const transporter = nodeMailer.createTransport({
+    const transporter = createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
       secure: false,

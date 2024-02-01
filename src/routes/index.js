@@ -1,6 +1,5 @@
-const Router = require("express");
 const { verifyToken } = require("../middlewares/auth.middleware");
-const indexRouter = Router();
+const indexRouter = require("express").Router();
 
 indexRouter.get("/", verifyToken, (req, res) => {
   res.send("Hello world");

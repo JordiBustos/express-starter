@@ -31,7 +31,7 @@ async function createRole(req, res) {
  * @param {Response} res
  * @returns {String} 200 roles found or error message
  */
-async function getAllRoles(req, res) {
+async function getAllRoles(res) {
   try {
     const roles = await Role.findAll();
 

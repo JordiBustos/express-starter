@@ -1,5 +1,4 @@
 const { body, param } = require("express-validator");
-
 /**
  * Validate role creation POST request
  * @returns {Array} array of validation rules
@@ -33,8 +32,4 @@ function validateRoleName() {
   ];
 }
 
-module.exports = {
-  validateRoleCreation,
-  validateRoleDelete,
-  validateRoleName,
-};
+module.exports = { validateRoleCreation, validateRoleDelete, validateRoleName };

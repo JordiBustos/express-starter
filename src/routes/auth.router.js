@@ -1,11 +1,14 @@
 const router = require("express").Router();
+
 const {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
+  deleteUserByUsername,
   logout,
 } = require("../controllers/auth.controller");
+
 const {
   validateRegister,
   validateLogin,
@@ -19,9 +22,10 @@ router.post("/login", validateLogin(), login);
 router.post(
   "/reestablish-password",
   validateReestablishPassword(),
-  reestablishPassword
+  reestablishPassword,
 );
 router.post("/logout", validateAccountInformation(), logout);
 router.get("/get-user", validateAccountInformation(), getAccountInformation);
+router.delete("/delete-user/:username", deleteUserByUsername);
 
 module.exports = router;

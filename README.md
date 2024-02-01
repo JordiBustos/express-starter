@@ -17,6 +17,12 @@ docker-compose build
 docker-compose up
 ```
 
+To run tests:
+
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
 ## Environment Variables
 
 Before running the application, make sure to set the following environment variables in a .env file at the root of the project:
@@ -43,11 +49,3 @@ If you encounter issues or have suggestions for improvement, feel free to open a
 ## License
 
 This project is licensed under the MIT License.
-
-### TODO
-
-- Set isActive to false when logout
-- Create email validation
-- Implement roles for users
-- Implement permissions system based on role assigned to user
-- UI as django admin?

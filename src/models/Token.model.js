@@ -27,7 +27,7 @@ const Token = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = Token;
