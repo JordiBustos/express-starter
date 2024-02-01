@@ -1,12 +1,9 @@
-const {
-  generateHashedPassword,
-  generateAccessToken,
-} = require("../utils/auth.js");
-const bcrypt = require("bcrypt");
-const request = require("supertest");
-const express = require("express");
-const startCore = require("../startCore");
-const { testEnvironmentOptions } = require("../jest.setup");
+import { generateHashedPassword, generateAccessToken } from "../utils/auth.js";
+import { compareSync } from "bcrypt";
+import request from "supertest";
+import express from "express";
+import startCore from "../startCore.js";
+import { testEnvironmentOptions } from "../jest.setup.js";
 
 let app, server;
 
@@ -27,7 +24,7 @@ describe("Authentication Functions", () => {
     it("should generate a hashed password", () => {
       const password = "testpassword";
       const hashedPassword = generateHashedPassword(password);
-      const isSimilar = bcrypt.compareSync(password, hashedPassword);
+      const isSimilar = compareSync(password, hashedPassword);
       expect(hashedPassword).toBeDefined();
       expect(hashedPassword).not.toEqual(password);
       expect(isSimilar).toBe(true);
@@ -81,7 +78,7 @@ describe("Authentication endpoints", () => {
       expect(result.body).toHaveProperty("token");
 
       const deleteResult = await request(app).delete(
-        "/auth/delete-user/" + username,
+        "/auth/delete-user/" + username
       );
       expect(deleteResult.status).toBe(200);
     });

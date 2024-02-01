@@ -1,12 +1,14 @@
 {
   "name": "node-starter",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "node --watch ./src/app.js",
-    "test": "jest  --setupFiles ./src/jest.setup.js"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --setupFiles=./src/jest.setup.js"
   },
+  "exports": "./src/app.js",
   "dependencies": {
     "@babel/preset-env": "^7.23.9",
     "bcrypt": "^5.1.1",

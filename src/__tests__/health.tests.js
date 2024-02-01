@@ -1,7 +1,8 @@
-const request = require("supertest");
-const express = require("express");
-const startCore = require("../startCore");
-const { testEnvironmentOptions } = require("../jest.setup");
+import request from "supertest";
+import express from "express";
+import startCore from "../startCore.js";
+import { testEnvironmentOptions } from "../jest.setup.js";
+
 let app, server;
 
 describe("Test /health and /redis-health", () => {
