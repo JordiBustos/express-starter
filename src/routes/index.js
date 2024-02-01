@@ -3,7 +3,7 @@ import { Router } from "express";
 
 const indexRouter = Router();
 
-indexRouter.get("/", verifyToken, (_req, res) => {
+indexRouter.get("/", verifyToken, (req, res) => {
   res.send("Hello world");
 });
 

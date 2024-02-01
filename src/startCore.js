@@ -3,7 +3,9 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import limiter from "./constants/limiter.js";
 import "dotenv/config";
-import connectRedis from "./utils/connectRedis.js";
+import createRedisClient from "./utils/connectRedis.js";
+import session from "express-session";
+import RedisStore from "connect-redis";
 import indexRouter from "./routes/index.js";
 import authRouter from "./routes/auth.router.js";
 import rolesRouter from "./routes/role.router.js";
@@ -18,14 +20,35 @@ async function startCore(app, port) {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
 
+  const client = await createRedisClient();
+  app.locals.client = client;
+  let redisStore = new RedisStore({
+    client: client,
+    prefix: "node-starter-redis",
+  });
+  app.use(
+    session({
+      store: redisStore,
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: true,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 10,
+      },
+    }),
+  );
+
+  // enable this if you run behind a proxy (e.g. nginx)
+  // app.set('trust proxy', 1);
+
   app.use(limiter);
   app.use(cors());
   app.use(logger("dev"));
   app.use(json());
   app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
-
-  const filename = "";
 
   app.use(express.static(join(__dirname, "public")));
 
@@ -53,9 +76,10 @@ async function startCore(app, port) {
 
   db.authenticate();
   db.sync();
+
   const server = app.listen(port || process.env.PORT, async () => {
     try {
-      app.locals.client = await connectRedis();
+      console.log("Server is running on port:", server.address().port);
     } catch (err) {
       console.log(`Redis was not connect due to: ${err}`);
     }
