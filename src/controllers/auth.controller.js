@@ -1,11 +1,11 @@
-import User from "../models/User.model.js";
+import { compareSync } from "bcrypt";
 import Token from "../models/Token.model.js";
+import User from "../models/User.model.js";
 import {
   generateAccessToken,
   generateHashedPassword,
   getUserByUsername,
 } from "../utils/auth.js";
-import { compareSync } from "bcrypt";
 
 /**
  * Register user controller with username, password and email

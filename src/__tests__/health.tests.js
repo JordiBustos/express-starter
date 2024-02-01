@@ -1,7 +1,7 @@
-import request from "supertest";
 import express from "express";
-import startCore from "../startCore.js";
+import request from "supertest";
 import { jestSetup } from "../jest.setup.js";
+import startCore from "../startCore.js";
 
 let app, server;
 
@@ -10,7 +10,7 @@ describe("Test /health and /redis-health", () => {
     app = express();
     server = await startCore(
       app,
-      jestSetup.testEnvironmentOptions.APP_PORT + 1
+      jestSetup.testEnvironmentOptions.APP_PORT + 1,
     );
   });
 

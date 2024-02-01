@@ -80,7 +80,7 @@ export async function updateRole(req, res) {
   try {
     const updatedRole = await Role.update(
       { role, permissions },
-      { where: { id } }
+      { where: { id } },
     );
 
     if (!updatedRole) {

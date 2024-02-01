@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
 import { genSaltSync, hashSync } from "bcrypt";
-import User from "../models/User.model.js";
+import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import User from "../models/User.model.js";
 /**
  * Generate access token
  * @param {User} user

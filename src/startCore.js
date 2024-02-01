@@ -1,20 +1,18 @@
-import { join } from "path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
-import limiter from "./constants/limiter.js";
-import "dotenv/config";
-import createRedisClient from "./utils/connectRedis.js";
-import session from "express-session";
 import RedisStore from "connect-redis";
-import indexRouter from "./routes/index.js";
-import authRouter from "./routes/auth.router.js";
-import rolesRouter from "./routes/role.router.js";
-import express, { json, urlencoded } from "express";
-import db from "./db.js";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import "dotenv/config";
+import express, { json, urlencoded } from "express";
+import limiter from "./constants/limiter.js";
+import session from "express-session";
+import logger from "morgan";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+import db from "./db.js";
+import authRouter from "./routes/auth.router.js";
+import indexRouter from "./routes/index.js";
+import rolesRouter from "./routes/role.router.js";
+import createRedisClient from "./utils/connectRedis.js";
 
 async function startCore(app, port) {
   const __filename = fileURLToPath(import.meta.url);
@@ -32,8 +30,10 @@ async function startCore(app, port) {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
+      name: "redisSession",
       cookie: {
         secure: true,
+        domain: process.env.ALLOWED_DOMAIN,
         httpOnly: true,
         maxAge: 1000 * 60 * 10,
       },
@@ -72,6 +72,15 @@ async function startCore(app, port) {
     } catch (err) {
       res.status(500).send(`Redis is not running: ${err}`);
     }
+  });
+
+  app.use((_, res) => {
+    res.status(404).send("Not found");
+  });
+
+  app.use((error, req, res) => {
+    console.eror(error);
+    res.status(500).send("Internal server error");
   });
 
   db.authenticate();

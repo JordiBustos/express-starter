@@ -1,30 +1,27 @@
 import { Router } from "express";
-
-const router = Router();
-
 import {
-  register,
-  login,
-  reestablishPassword,
-  getAccountInformation,
   deleteUserByUsername,
+  getAccountInformation,
+  login,
   logout,
+  reestablishPassword,
+  register,
 } from "../controllers/auth.controller.js";
-
 import {
-  validateRegister,
-  validateLogin,
-  validateReestablishPassword,
   validateAccountInformation,
+  validateLogin,
   validateLogout,
+  validateReestablishPassword,
+  validateRegister,
 } from "../middlewares/auth.middleware.js";
 
+const router = Router();
 router.post("/register", validateRegister(), register);
 router.post("/login", validateLogin(), login);
 router.post(
   "/reestablish-password",
   validateReestablishPassword(),
-  reestablishPassword
+  reestablishPassword,
 );
 router.post("/logout", validateAccountInformation(), logout);
 router.get(

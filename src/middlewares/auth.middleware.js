@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
 import { body, param } from "express-validator";
+import jwt from "jsonwebtoken";
 import Token from "../models/Token.model.js";
 import User from "../models/User.model.js";
 

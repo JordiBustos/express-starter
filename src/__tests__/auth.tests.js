@@ -1,8 +1,8 @@
-import { generateHashedPassword, generateAccessToken } from "../utils/auth.js";
 import { compareSync } from "bcrypt";
-import request from "supertest";
 import express from "express";
+import request from "supertest";
 import startCore from "../startCore.js";
+import { generateAccessToken, generateHashedPassword } from "../utils/auth.js";
 
 import { jestSetup } from "../jest.setup.js";
 
@@ -79,7 +79,7 @@ describe("Authentication endpoints", () => {
       expect(result.body).toHaveProperty("token");
 
       const deleteResult = await request(app).delete(
-        "/auth/delete-user/" + username
+        "/auth/delete-user/" + username,
       );
       expect(deleteResult.status).toBe(200);
     });
