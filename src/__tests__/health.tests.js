@@ -3,6 +3,7 @@ import express from "express";
 import startCore from "../startCore.js";
 import { testEnvironmentOptions } from "../jest.setup.js";
 
+
 let app, server;
 
 describe("Test /health and /redis-health", () => {

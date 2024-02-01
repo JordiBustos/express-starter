@@ -1,5 +1,5 @@
-const express = require("express");
-const startCore = require("./startCore");
+import express from "express";
+import startCore from "./startCore.js";
 
 var app = express();
 startCore(app);

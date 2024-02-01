@@ -1,5 +1,4 @@
 import "dotenv/config";
-// TODO fix server reloading on test
 
 module.exports = {
   testEnvironmentOptions: {

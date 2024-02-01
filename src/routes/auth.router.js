@@ -1,28 +1,30 @@
-const router = require("express").Router();
+import { Router } from "express";
 
-const {
+const router = Router();
+
+import {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
   deleteUserByUsername,
   logout,
-} = require("../controllers/auth.controller");
+} from "../controllers/auth.controller.js";
 
-const {
+import {
   validateRegister,
   validateLogin,
   validateReestablishPassword,
   validateAccountInformation,
   validateLogout,
-} = require("../middlewares/auth.middleware");
+} from "../middlewares/auth.middleware.js";
 
 router.post("/register", validateRegister(), register);
 router.post("/login", validateLogin(), login);
 router.post(
   "/reestablish-password",
   validateReestablishPassword(),
-  reestablishPassword,
+  reestablishPassword
 );
 router.post("/logout", validateAccountInformation(), logout);
 router.get(
@@ -32,4 +34,4 @@ router.get(
 );
 router.delete("/delete-user/:username", deleteUserByUsername);
 
-module.exports = router;
+export default router;
