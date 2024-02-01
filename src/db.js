@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+import Sequelize from "sequelize";
 
 const db = new Sequelize({
   database: process.env.DB_NAME,
@@ -8,4 +8,4 @@ const db = new Sequelize({
   dialect: "postgres",
 });
 
-module.exports = db;
+export default db;

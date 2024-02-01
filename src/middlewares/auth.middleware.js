@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { body, param } = require("express-validator");
-const Token = require("../models/Token.model");
-const User = require("../models/User.model");
+import jwt from "jsonwebtoken";
+import { body, param } from "express-validator";
+import Token from "../models/Token.model.js";
+import User from "../models/User.model.js";
 
 /**
  * Verify token continue to next route or return error response
@@ -10,7 +10,7 @@ const User = require("../models/User.model");
  * @param {Function} next
  * @returns {null || Object} null or error response
  */
-function verifyToken(req, res, next) {
+export function verifyToken(req, res, next) {
   async function updateUser(User, id) {
     await User.update({ isActive: false }, { where: { id } });
     return res.status(403).send("Invalid token.");
@@ -59,7 +59,7 @@ function verifyToken(req, res, next) {
  * @param {String} action
  * @returns {Function | Response} middleware || error response
  */
-function verifyPermissions(user, action) {
+export function verifyPermissions(user, action) {
   return (_, res, next) => {
     if (user.role.permissions.includes(action)) next();
     else return res.status(403).send("You don't have permission.");
@@ -69,7 +69,7 @@ function verifyPermissions(user, action) {
 /** Validate register
  * @returns {Array} array of validation rules
  */
-function validateRegister() {
+export function validateRegister() {
   return [
     body("username").trim().notEmpty().escape(),
     body("password")
@@ -94,7 +94,7 @@ function validateRegister() {
  * Validate login
  * @returns {Array} array of validation rules
  */
-function validateLogin() {
+export function validateLogin() {
   return [
     body("username").trim().notEmpty().escape(),
     body("password").trim().notEmpty().escape(),
@@ -105,7 +105,7 @@ function validateLogin() {
  * Validate reestablish password
  * @returns {Array} array of validation rules
  */
-function validateReestablishPassword() {
+export function validateReestablishPassword() {
   return [
     body("email").notEmpty().isEmail().escape(),
     body("password").trim().notEmpty().escape(),
@@ -116,7 +116,7 @@ function validateReestablishPassword() {
  * Validate account information
  * @returns {Array} array of validation rules
  */
-function validateAccountInformation() {
+export function validateAccountInformation() {
   return [param("username").trim().notEmpty().escape()];
 }
 
@@ -124,16 +124,6 @@ function validateAccountInformation() {
  * Validate logout
  * @returns {Array} array of validation rules
  */
-function validateLogout() {
+export function validateLogout() {
   return [body("username").trim().notEmpty().escape()];
 }
-
-module.exports = {
-  validateAccountInformation,
-  validateLogin,
-  validateLogout,
-  validateRegister,
-  validateReestablishPassword,
-  verifyPermissions,
-  verifyToken,
-};

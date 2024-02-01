@@ -1,6 +1,6 @@
-const request = require("supertest");
-const express = require("express");
-const startCore = require("../startCore");
+import request from "supertest";
+import express from "express";
+import startCore from "../startCore.js";
 
 let app, server;
 

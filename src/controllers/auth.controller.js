@@ -1,11 +1,11 @@
-const User = require("../models/User.model");
-const Token = require("../models/Token.model");
-const {
+import User from "../models/User.model.js";
+import Token from "../models/Token.model.js";
+import {
   generateAccessToken,
   generateHashedPassword,
   getUserByUsername,
-} = require("../utils/auth");
-const bcrypt = require("bcrypt");
+} from "../utils/auth.js";
+import { compareSync } from "bcrypt";
 
 /**
  * Register user controller with username, password and email
@@ -13,7 +13,7 @@ const bcrypt = require("bcrypt");
  * @param {Response} res
  * @returns {String} json web token or error message
  */
-async function register(req, res) {
+export async function register(req, res) {
   try {
     const { username, password, email } = req.body;
 
@@ -45,17 +45,17 @@ async function register(req, res) {
  * @param {Response} res
  * @returns {String} json web token or error message
  */
-async function login(req, res) {
+export async function login(req, res) {
   try {
     const { username, password } = req.body;
     const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
-    const isValidPassword = bcrypt.compareSync(password, user.password);
+    const isValidPassword = compareSync(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
     await User.update(
       { lastLogin: new Date(), isActive: true },
-      { where: { username } },
+      { where: { username } }
     );
 
     const response = generateAccessToken(user);
@@ -80,7 +80,7 @@ async function login(req, res) {
  * @param {Response} res
  * retrun {Response} 200 if logout is successful else 500
  */
-async function logout(req, res) {
+export async function logout(req, res) {
   try {
     const { username } = req.user;
     await User.update({ isActive: false }, { where: { username } });
@@ -99,7 +99,7 @@ async function logout(req, res) {
  * @param {Request} req
  * @param {Response} res
  */
-async function reestablishPassword(req, res) {
+export async function reestablishPassword(req, res) {
   const { email, password } = req.body;
 
   try {
@@ -122,7 +122,7 @@ async function reestablishPassword(req, res) {
  * @param {Request} req
  * @param {Response} res
  */
-async function getAccountInformation(req, res) {
+export async function getAccountInformation(req, res) {
   const { username } = req.query;
 
   try {
@@ -135,7 +135,7 @@ async function getAccountInformation(req, res) {
   }
 }
 
-async function deleteUserByUsername(req, res) {
+export async function deleteUserByUsername(req, res) {
   const username = req.params.username;
   try {
     const user = await getUserByUsername(username);
@@ -147,12 +147,3 @@ async function deleteUserByUsername(req, res) {
     res.status(500).send("Internal server error");
   }
 }
-
-module.exports = {
-  register,
-  login,
-  reestablishPassword,
-  getAccountInformation,
-  logout,
-  deleteUserByUsername,
-};

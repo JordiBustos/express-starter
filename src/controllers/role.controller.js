@@ -1,4 +1,4 @@
-const Role = require("../models/Role.model");
+import Role from "../models/Role.model.js";
 
 /**
  * Create role controller with role and permissions
@@ -6,7 +6,7 @@ const Role = require("../models/Role.model");
  * @param {Response} res
  * @returns {String} 200 role created or error message
  */
-async function createRole(req, res) {
+export async function createRole(req, res) {
   const { role, permissions } = req.body;
   try {
     const newRole = await Role.create({
@@ -31,7 +31,7 @@ async function createRole(req, res) {
  * @param {Response} res
  * @returns {String} 200 roles found or error message
  */
-async function getAllRoles(res) {
+export async function getAllRoles(res) {
   try {
     const roles = await Role.findAll();
 
@@ -52,7 +52,7 @@ async function getAllRoles(res) {
  * @param {Response} res
  * @returns {String} 200 role deleted or error message
  */
-async function deleteRole(req, res) {
+export async function deleteRole(req, res) {
   const { id } = req.params;
   try {
     const role = await Role.destroy({ where: { id } });
@@ -74,13 +74,13 @@ async function deleteRole(req, res) {
  * @param {Response} res
  * @returns {String} 200 role updated or error message
  */
-async function updateRole(req, res) {
+export async function updateRole(req, res) {
   const { id } = req.params;
   const { role, permissions } = req.body;
   try {
     const updatedRole = await Role.update(
       { role, permissions },
-      { where: { id } },
+      { where: { id } }
     );
 
     if (!updatedRole) {
@@ -100,7 +100,7 @@ async function updateRole(req, res) {
  * @param {Response} res
  * @returns {String} 200 role found or error message
  */
-async function getRoleByRoleName(req, res) {
+export async function getRoleByRoleName(req, res) {
   const { role } = req.params;
   try {
     const roleFound = await Role.findOne({ where: { role } });
@@ -115,11 +115,3 @@ async function getRoleByRoleName(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
-module.exports = {
-  createRole,
-  getAllRoles,
-  deleteRole,
-  updateRole,
-  getRoleByRoleName,
-};
