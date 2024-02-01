@@ -25,13 +25,6 @@ async function register(req, res) {
       password: generateHashedPassword(password),
       email: email.toLowerCase(),
       role: "user",
-      isActive: true,
-      isVerified: false,
-      profileImage: "",
-      displayName: "",
-      lastLogin: new Date(),
-      updatedAt: new Date(),
-      createdAt: new Date(),
     });
 
     const response = generateAccessToken(user);
