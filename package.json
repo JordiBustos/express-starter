@@ -1,11 +1,12 @@
 {
   "name": "node-starter",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "node --watch ./src/app.js",
-    "test": "jest --setupFiles ./jest.setup.js --detectOpenHandles"
+    "test": "jest  --setupFiles ./src/jest.setup.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { body, param } = require("express-validator");
-const Token = require("../models/Token.model");
-const User = require("../models/User.model");
+import verify from "jsonwebtoken";
+import { body, param } from "express-validator";
+import Token from "../models/Token.model.js";
+import { User } from "../models/User.model.js";
 
 /**
  * Verify token continue to next route or return error response
@@ -23,7 +23,7 @@ function verifyToken(req, res, next) {
     return res.status(401).send("Access denied. No token provided.");
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+    verify(token, process.env.JWT_SECRET, async (err, user) => {
       if (err) return res.status(403).send("Invalid token.");
       if (user.exp <= Date.now() / 1000) return updateUser(User, user.id);
       req.user = user;
@@ -128,7 +128,7 @@ function validateLogout() {
   return [body("username").trim().notEmpty().escape()];
 }
 
-module.exports = {
+export {
   validateAccountInformation,
   validateLogin,
   validateLogout,

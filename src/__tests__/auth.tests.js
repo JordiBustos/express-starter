@@ -67,7 +67,7 @@ describe("Authentication endpoints", () => {
       expect(result.body).toHaveProperty("token");
 
       const deleteResult = await request(app).delete(
-        "/auth/delete-user/" + username,
+        "/auth/delete-user/" + username
       );
       expect(deleteResult.status).toBe(200);
     });

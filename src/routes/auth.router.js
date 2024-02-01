@@ -1,19 +1,22 @@
-const router = require("express").Router();
-const {
+import { Router } from "express";
+
+const router = Router();
+
+import {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
   deleteUserByUsername,
   logout,
-} = require("../controllers/auth.controller");
-const {
+} from "../controllers/auth.controller.js";
+import {
   validateRegister,
   validateLogin,
   validateReestablishPassword,
   validateAccountInformation,
   validateLogout,
-} = require("../middlewares/auth.middleware");
+} from "../middlewares/auth.middleware.js";
 
 router.post("/register", validateRegister(), register);
 router.post("/login", validateLogin(), login);
@@ -26,4 +29,4 @@ router.post("/logout", validateAccountInformation(), logout);
 router.get("/get-user", validateAccountInformation(), getAccountInformation);
 router.delete("/delete-user/:username", deleteUserByUsername);
 
-module.exports = router;
+export default router;
