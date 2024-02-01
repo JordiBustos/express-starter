@@ -14,9 +14,11 @@ import { compareSync } from "bcrypt";
  * @returns {String} json web token or error message
  */
 export async function register(req, res) {
-  try {
-    const { username, password, email } = req.body;
+  const { username, password, email } = req.body;
+  req.session.username = username;
+  req.session.email = email;
 
+  try {
     const userExists = await getUserByUsername(username);
     if (userExists) return res.status(400).send("User already exists");
 
@@ -46,8 +48,9 @@ export async function register(req, res) {
  * @returns {String} json web token or error message
  */
 export async function login(req, res) {
+  const { username, password } = req.body;
+  req.session.username = username;
   try {
-    const { username, password } = req.body;
     const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
     const isValidPassword = compareSync(password, user.password);
@@ -55,7 +58,7 @@ export async function login(req, res) {
 
     await User.update(
       { lastLogin: new Date(), isActive: true },
-      { where: { username } }
+      { where: { username } },
     );
 
     const response = generateAccessToken(user);
