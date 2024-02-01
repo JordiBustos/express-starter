@@ -27,7 +27,11 @@ router.post(
   reestablishPassword
 );
 router.post("/logout", validateAccountInformation(), logout);
-router.get("/get-user", validateAccountInformation(), getAccountInformation);
+router.get(
+  "/get-user/:username",
+  validateAccountInformation(),
+  getAccountInformation,
+);
 router.delete("/delete-user/:username", deleteUserByUsername);
 
 export default router;
