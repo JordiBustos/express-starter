@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-module.exports = {
+export const jestSetup = {
   testEnvironmentOptions: {
     APP_PORT: 3002, // Use a different port
   },

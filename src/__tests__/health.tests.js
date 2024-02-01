@@ -1,15 +1,17 @@
 import request from "supertest";
 import express from "express";
 import startCore from "../startCore.js";
-import { testEnvironmentOptions } from "../jest.setup.js";
-
+import { jestSetup } from "../jest.setup.js";
 
 let app, server;
 
 describe("Test /health and /redis-health", () => {
   beforeAll(async () => {
     app = express();
-    server = await startCore(app, testEnvironmentOptions.APP_PORT + 1);
+    server = await startCore(
+      app,
+      jestSetup.testEnvironmentOptions.APP_PORT + 1
+    );
   });
 
   afterAll(async () => {
