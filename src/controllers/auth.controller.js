@@ -26,7 +26,7 @@ export async function register(req, res) {
       username,
       password: generateHashedPassword(password),
       email: email.toLowerCase(),
-      role: "user",
+      roleId: 1, // default role
     });
 
     const response = generateAccessToken(user);

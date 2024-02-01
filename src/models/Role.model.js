@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+
 import db from "../db.js";
 
 const Role = db.define(
@@ -9,6 +10,9 @@ const Role = db.define(
       autoIncrement: true,
       primaryKey: true,
       allowNull: false,
+      unique: true,
+      field: "id",
+      comment: "Role ID",
     },
     role: {
       type: DataTypes.STRING,
@@ -21,7 +25,14 @@ const Role = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
+/*
+await Role.create({
+  id: 1,
+  role: "admin",
+  permissions: ["create", "read", "update", "delete"],
+});
+*/
 export default Role;

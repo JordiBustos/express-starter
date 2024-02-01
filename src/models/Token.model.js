@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+import User from "./User.model.js";
 import db from "../db.js";
 
 const Token = db.define(
@@ -27,7 +28,11 @@ const Token = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
+
+Token.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+db.sync();
 
 export default Token;
