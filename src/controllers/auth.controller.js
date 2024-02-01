@@ -6,6 +6,7 @@ const {
   getUserByUsername,
 } = require("../utils/auth");
 const bcrypt = require("bcrypt");
+const { where } = require("sequelize");
 
 /**
  * Register user controller with username, password and email
@@ -135,10 +136,23 @@ async function getAccountInformation(req, res) {
   }
 }
 
+async function deleteUserByUsername(req, res) {
+  const username = req.params.username;
+  try {
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(404).send("User not found");
+    await User.destroy({ where: { username } });
+    return res.status(200).send("User deleted");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+}
 module.exports = {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
   logout,
+  deleteUserByUsername,
 };

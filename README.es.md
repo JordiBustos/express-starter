@@ -34,6 +34,10 @@ REDIS_HOST=redis
 REDIS_PORT=6379
 ```
 
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
 ## Contribuciones
 
 Si encuentras problemas o tienes sugerencias para mejorar, no dudes en abrir un issue o enviar un pull request. ¡Las contribuciones son bienvenidas!
@@ -41,9 +45,3 @@ Si encuentras problemas o tienes sugerencias para mejorar, no dudes en abrir un 
 ## Licencia
 
 Este proyecto está licenciado bajo la licencia MIT.
-
-### TODO
-
-- Create email validation
-- Implement permissions system based on role assigned to user
-- UI as django admin?

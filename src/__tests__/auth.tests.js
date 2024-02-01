@@ -1,9 +1,22 @@
 const {
   generateHashedPassword,
   generateAccessToken,
-  getUserByUsername,
 } = require("../utils/auth.js");
 const bcrypt = require("bcrypt");
+const request = require("supertest");
+const express = require("express");
+const startCore = require("../startCore");
+
+let app, server;
+
+beforeAll(async () => {
+  app = express();
+  server = await startCore(app, 3001);
+});
+
+afterAll(async () => {
+  await server.close();
+});
 
 describe("Authentication Functions", () => {
   // Mock User object for testing
@@ -28,42 +41,35 @@ describe("Authentication Functions", () => {
       expect(accessToken.expiresAt - expirationDate).toBeLessThanOrEqual(5); // 5ms
     });
   });
+});
 
-  /*
-  describe("getUserByUsername", () => {
-    it("should get a user by username", async () => {
-      const mockUsername = "testuser";
-      const mockFindOne = jest.fn(() => Promise.resolve(mockUser));
-      const mockUserModel = { findOne: mockFindOne };
-
-      // Mock the User model
-      jest.mock("../models/User.model", () => ({
-        findOne: mockFindOne,
-      }));
-
-      const user = await getUserByUsername(mockUsername);
-      expect(user).toEqual(mockUser);
-      expect(mockFindOne).toHaveBeenCalledWith({
-        where: { username: mockUsername },
+describe("Authentication endpoints", () => {
+  describe("POST /auth/login", () => {
+    it("should return a 200 status code", async () => {
+      const result = await request(app).post("/auth/login").send({
+        username: "admin",
+        password: "admin",
       });
-    });
-
-    it("should handle errors when getting a user by username", async () => {
-      const mockUsername = "testuser";
-      const mockFindOne = jest.fn(() => Promise.reject("Error"));
-      const mockUserModel = { findOne: mockFindOne };
-
-      // Mock the User model
-      jest.mock("../models/User.model", () => ({
-        findOne: mockFindOne,
-      }));
-
-      const user = await getUserByUsername(mockUsername);
-      expect(user).toBeNull();
-      expect(mockFindOne).toHaveBeenCalledWith({
-        where: { username: mockUsername },
-      });
+      expect(result.status).toBe(200);
+      expect(result.body).toHaveProperty("token");
     });
   });
-  */
+
+  describe("POST /auth/register", () => {
+    it("should return a 201 status code", async () => {
+      const username = "userdemo";
+      const result = await request(app).post("/auth/register").send({
+        username: username,
+        password: "testpassword",
+        email: "unique@unique.com",
+      });
+      expect(result.status).toBe(201);
+      expect(result.body).toHaveProperty("token");
+
+      const deleteResult = await request(app).delete(
+        "/auth/delete-user/" + username,
+      );
+      expect(deleteResult.status).toBe(200);
+    });
+  });
 });
