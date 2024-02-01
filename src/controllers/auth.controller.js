@@ -123,7 +123,7 @@ async function reestablishPassword(req, res) {
  * @param {Response} res
  */
 async function getAccountInformation(req, res) {
-  const { username } = req.query;
+  const username = req.params.username;
 
   try {
     const user = await getUserByUsername(username);

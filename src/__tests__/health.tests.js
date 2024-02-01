@@ -1,13 +1,13 @@
 const request = require("supertest");
 const express = require("express");
 const startCore = require("../startCore");
-
+const { testEnvironmentOptions } = require("../jest.setup");
 let app, server;
 
 describe("Test /health and /redis-health", () => {
   beforeAll(async () => {
     app = express();
-    server = await startCore(app, 3001);
+    server = await startCore(app, testEnvironmentOptions.APP_PORT + 1);
   });
 
   afterAll(async () => {

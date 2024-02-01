@@ -6,12 +6,13 @@ const bcrypt = require("bcrypt");
 const request = require("supertest");
 const express = require("express");
 const startCore = require("../startCore");
+const { testEnvironmentOptions } = require("../jest.setup");
 
 let app, server;
 
 beforeAll(async () => {
   app = express();
-  server = await startCore(app, 3001);
+  server = await startCore(app, testEnvironmentOptions.APP_PORT);
 });
 
 afterAll(async () => {
@@ -44,6 +45,18 @@ describe("Authentication Functions", () => {
 });
 
 describe("Authentication endpoints", () => {
+  describe("GET /auth/get-user", () => {
+    it("should return the user information", async () => {
+      const result = await request(app).get("/auth/get-user/admin");
+
+      expect(result.status).toBe(200);
+      expect(result.body).toHaveProperty("username");
+      expect(result.body).toHaveProperty("email");
+      expect(result.body).toHaveProperty("role");
+      expect(result.body).toHaveProperty("password");
+    });
+  });
+
   describe("POST /auth/login", () => {
     it("should return a 200 status code", async () => {
       const result = await request(app).post("/auth/login").send({
@@ -52,10 +65,11 @@ describe("Authentication endpoints", () => {
       });
       expect(result.status).toBe(200);
       expect(result.body).toHaveProperty("token");
+      expect(result.body).toHaveProperty("expiresAt");
     });
   });
 
-  describe("POST /auth/register", () => {
+  describe("POST /auth/register and DELETE /auth/delete-user/:username", () => {
     it("should return a 201 status code", async () => {
       const username = "userdemo";
       const result = await request(app).post("/auth/register").send({
@@ -67,7 +81,7 @@ describe("Authentication endpoints", () => {
       expect(result.body).toHaveProperty("token");
 
       const deleteResult = await request(app).delete(
-        "/auth/delete-user/" + username
+        "/auth/delete-user/" + username,
       );
       expect(deleteResult.status).toBe(200);
     });
