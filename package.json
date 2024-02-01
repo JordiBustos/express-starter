@@ -12,7 +12,6 @@
   "dependencies": {
     "@babel/preset-env": "^7.23.9",
     "bcrypt": "^5.1.1",
-    "compress": "^0.99.0",
     "compression": "^1.7.4",
     "connect-redis": "^7.1.1",
     "cookie-parser": "~1.4.4",
