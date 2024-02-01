@@ -1,9 +1,9 @@
-const { body, param } = require("express-validator");
+import { body, param } from "express-validator";
 /**
  * Validate role creation POST request
  * @returns {Array} array of validation rules
  */
-function validateRoleCreation() {
+export function validateRoleCreation() {
   return [
     body("role").exists().withMessage("Role is required").trim().notEmpty(),
     body("permissions")
@@ -18,7 +18,7 @@ function validateRoleCreation() {
  * Validate role delete DELETE request
  * @returns {Array} array of validation rules
  */
-function validateRoleDelete() {
+export function validateRoleDelete() {
   return [param("id").exists().withMessage("Id is required").trim().notEmpty()];
 }
 
@@ -26,10 +26,8 @@ function validateRoleDelete() {
  * Validate role name GET request
  * @returns {Array} array of validation rules
  */
-function validateRoleName() {
+export function validateRoleName() {
   return [
     param("role").exists().withMessage("Role is required").trim().notEmpty(),
   ];
 }
-
-module.exports = { validateRoleCreation, validateRoleDelete, validateRoleName };

@@ -1,24 +1,33 @@
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-var limiter = require("./constants/limiter");
-require("dotenv").config();
-const connectRedis = require("./utils/connectRedis");
-var indexRouter = require("./routes/index");
-var authRouter = require("./routes/auth.router");
-var rolesRouter = require("./routes/role.router");
-var express = require("express");
-const db = require("./db");
-var cors = require("cors");
+import { join } from "path";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import limiter from "./constants/limiter.js";
+import "dotenv/config";
+import connectRedis from "./utils/connectRedis.js";
+import indexRouter from "./routes/index.js";
+import authRouter from "./routes/auth.router.js";
+import rolesRouter from "./routes/role.router.js";
+import express, { json, urlencoded } from "express";
+import db from "./db.js";
+import cors from "cors";
+
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 async function startCore(app, port) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+
   app.use(limiter);
   app.use(cors());
   app.use(logger("dev"));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
+  app.use(json());
+  app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, "public")));
+
+  const filename = "";
+
+  app.use(express.static(join(__dirname, "public")));
 
   app.use("/", indexRouter);
   app.use("/auth", authRouter);
@@ -55,4 +64,4 @@ async function startCore(app, port) {
   return server;
 }
 
-module.exports = startCore;
+export default startCore;

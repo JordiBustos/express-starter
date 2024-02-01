@@ -1,18 +1,20 @@
-const roleRouter = require("express").Router();
-const {
+import { Router } from "express";
+import {
   createRole,
   getRoleByRoleName,
   getAllRoles,
   updateRole,
   deleteRole,
-} = require("../controllers/role.controller");
-const {
+} from "../controllers/role.controller.js";
+import {
   validateRoleCreation,
   validateRoleName,
   validateRoleDelete,
-} = require("../middlewares/role.middleware");
+} from "../middlewares/role.middleware.js";
 
-const { verifyToken } = require("../middlewares/auth.middleware");
+import { verifyToken } from "../middlewares/auth.middleware.js";
+
+const roleRouter = Router();
 
 roleRouter.post(
   "/create-role",
@@ -40,4 +42,4 @@ roleRouter.put(
   updateRole
 );
 
-module.exports = roleRouter;
+export default roleRouter;

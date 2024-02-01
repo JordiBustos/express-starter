@@ -1,5 +1,5 @@
-const { DataTypes } = require("sequelize");
-const db = require("../db");
+import { DataTypes } from "sequelize";
+import db from "../db.js";
 
 const User = db.define(
   "Users",
@@ -62,7 +62,7 @@ const User = db.define(
   },
   {
     timestamps: false,
-  },
+  }
 );
 
 async function userExists(username) {
@@ -103,4 +103,4 @@ async function insertMockUser() {
   }
 }
 
-module.exports = User;
+export default User;

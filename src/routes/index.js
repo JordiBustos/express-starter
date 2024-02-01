@@ -1,8 +1,10 @@
-const { verifyToken } = require("../middlewares/auth.middleware");
-const indexRouter = require("express").Router();
+import { verifyToken } from "../middlewares/auth.middleware.js";
+import { Router } from "express";
 
-indexRouter.get("/", verifyToken, (req, res) => {
+const indexRouter = Router();
+
+indexRouter.get("/", verifyToken, (_req, res) => {
   res.send("Hello world");
 });
 
-module.exports = indexRouter;
+export default indexRouter;
