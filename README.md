@@ -41,6 +41,8 @@ REDIS_PASSWORD='password'
 REDIS_HOST=redis
 REDIS_PORT=6379
 SESSION_SECRET=1234
+ALLOWED_DOMAIN='http://localhost:3000'
+NODE_ENV='development'
 ```
 
 ## Contributing

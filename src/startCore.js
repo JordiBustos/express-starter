@@ -1,13 +1,14 @@
+import compression from "compression";
 import RedisStore from "connect-redis";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import "dotenv/config";
 import express, { json, urlencoded } from "express";
-import limiter from "./constants/limiter.js";
 import session from "express-session";
 import logger from "morgan";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import limiter from "./constants/limiter.js";
 import db from "./db.js";
 import authRouter from "./routes/auth.router.js";
 import indexRouter from "./routes/index.js";
@@ -49,6 +50,7 @@ async function startCore(app, port) {
   app.use(json());
   app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
+  app.use(compression());
 
   app.use(express.static(join(__dirname, "public")));
 
@@ -78,8 +80,8 @@ async function startCore(app, port) {
     res.status(404).send("Not found");
   });
 
-  app.use((error, req, res) => {
-    console.eror(error);
+  app.use((err, req, res) => {
+    console.eror(err.stack);
     res.status(500).send("Internal server error");
   });
 
