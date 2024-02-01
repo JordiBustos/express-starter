@@ -1,5 +1,4 @@
-import { body, param } from "express-validator";
-
+const { body, param } = require("express-validator");
 /**
  * Validate role creation POST request
  * @returns {Array} array of validation rules
@@ -33,4 +32,4 @@ function validateRoleName() {
   ];
 }
 
-export { validateRoleCreation, validateRoleDelete, validateRoleName };
+module.exports = { validateRoleCreation, validateRoleDelete, validateRoleName };

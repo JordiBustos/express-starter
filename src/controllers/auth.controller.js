@@ -50,7 +50,7 @@ async function login(req, res) {
     const { username, password } = req.body;
     const user = await getUserByUsername(username);
     if (!user) return res.status(404).send("User not found");
-    const isValidPassword = compareSync(password, user.password);
+    const isValidPassword = bcrypt.compareSync(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
     await User.update(
@@ -135,10 +135,24 @@ async function getAccountInformation(req, res) {
   }
 }
 
+async function deleteUserByUsername(req, res) {
+  const username = req.params.username;
+  try {
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(404).send("User not found");
+    await User.destroy({ where: { username } });
+    return res.status(200).send("User deleted");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+}
+
 module.exports = {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
   logout,
+  deleteUserByUsername,
 };

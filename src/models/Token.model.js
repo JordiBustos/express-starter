@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import { db } from "../db.js";
+const { DataTypes } = require("sequelize");
+const db = require("../db");
 
 const Token = db.define(
   "Token",
@@ -30,4 +30,4 @@ const Token = db.define(
   },
 );
 
-export default Token;
+module.exports = Token;

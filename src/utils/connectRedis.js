@@ -1,4 +1,4 @@
-import { createClient } from "redis";
+const { createClient } = require("redis");
 
 const createRedisClient = async () => {
   const client = createClient({
@@ -14,4 +14,4 @@ const createRedisClient = async () => {
   return client;
 };
 
-export default createRedisClient;
+module.exports = createRedisClient;

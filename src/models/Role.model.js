@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import { db } from "../db.js";
+const { DataTypes } = require("sequelize");
+const db = require("../db");
 
-export const Role = db.define(
+const Role = db.define(
   "role",
   {
     id: {
@@ -23,3 +23,5 @@ export const Role = db.define(
     timestamps: true,
   },
 );
+
+module.exports = Role;

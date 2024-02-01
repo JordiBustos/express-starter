@@ -1,22 +1,21 @@
-import { Router } from "express";
+const router = require("express").Router();
 
-const router = Router();
-
-import {
+const {
   register,
   login,
   reestablishPassword,
   getAccountInformation,
   deleteUserByUsername,
   logout,
-} from "../controllers/auth.controller.js";
-import {
+} = require("../controllers/auth.controller");
+
+const {
   validateRegister,
   validateLogin,
   validateReestablishPassword,
   validateAccountInformation,
   validateLogout,
-} from "../middlewares/auth.middleware.js";
+} = require("../middlewares/auth.middleware");
 
 router.post("/register", validateRegister(), register);
 router.post("/login", validateLogin(), login);
@@ -29,4 +28,4 @@ router.post("/logout", validateAccountInformation(), logout);
 router.get("/get-user", validateAccountInformation(), getAccountInformation);
 router.delete("/delete-user/:username", deleteUserByUsername);
 
-export default router;
+module.exports = router;
