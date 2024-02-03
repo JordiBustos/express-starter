@@ -14,5 +14,18 @@ export const appConfig = {
   runsBehindProxy: false,
   version: "/api/v1",
 
+  permissions: [
+    "read",
+    "create",
+    "update",
+    "delete",
+    "assign",
+    "revoke",
+    "view",
+    "list",
+    "upload",
+    "download",
+  ],
+
   //  cronJobsEnabled: toBool(env("ENABLE_CRON_JOBS")),
 };
