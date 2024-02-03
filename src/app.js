@@ -11,9 +11,12 @@ app.use(helmet());
 app.use(validateContentType);
 app.disable("x-powered-by");
 app.use((_, res, next) => {
-  res.setHeader("Content-Type", "application/json"); // Change 'application/json' to the relevant MIME type for your application.
+  res.setHeader("Content-Type", "application/json");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "deny");
-  res.setHeader("Content-Security-Policy", "default-src 'none'");
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self' https://cdn.socket.io;",
+  );
   next();
 });

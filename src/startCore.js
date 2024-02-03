@@ -38,15 +38,7 @@ async function startCore(app, port) {
 
   const __dirname = getDirname();
 
-  // index false for security reasons
   app.use(express.static(join(__dirname, "public"), { index: false }));
-  app.use((_, res, next) => {
-    res.setHeader(
-      "Content-Security-Policy",
-      "script-src 'self' https://cdn.socket.io;",
-    );
-    next();
-  });
   app.use(appConfig.version + "/", indexRouter);
   app.use(appConfig.version + "/auth", authRouter);
   app.use(appConfig.version + "/roles", rolesRouter);
