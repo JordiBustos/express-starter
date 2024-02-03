@@ -16,7 +16,7 @@ import {
 export async function register(req, res) {
   const { username, password, email } = req.body;
   req.session.username = username;
-  req.session.email = email;
+  req.session.role = "user";
 
   try {
     const userExists = await getUserByUsername(username);
@@ -26,7 +26,7 @@ export async function register(req, res) {
       username,
       password: generateHashedPassword(password),
       email: email.toLowerCase(),
-      roleId: 1, // default role
+      roleId: 2, // default role
     });
 
     const response = generateAccessToken(user);
@@ -61,6 +61,10 @@ export async function login(req, res) {
       { where: { username } },
     );
 
+    req.session.role = user.role.role;
+
+    console.log(req.session);
+
     const response = generateAccessToken(user);
     await Token.create({
       token: response.token,
@@ -88,6 +92,7 @@ export async function logout(req, res) {
     const { username } = req.user;
     await User.update({ isActive: false }, { where: { username } });
     await Token.destroy({ where: { userId: req.user.id } });
+    req.session.destroy();
     res.clearCookie("token");
     res.status(200).send("Logout successful");
   } catch (err) {

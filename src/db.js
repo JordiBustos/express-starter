@@ -1,11 +1,14 @@
 import Sequelize from "sequelize";
+import { dbConfig } from "./config/dbConfig.js";
+
+const defaultProvider = dbConfig.defaultProvider;
 
 const db = new Sequelize({
-  database: process.env.DB_NAME,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  dialect: "postgres",
+  database: dbConfig.providers[defaultProvider].database,
+  username: dbConfig.providers[defaultProvider].username,
+  password: dbConfig.providers[defaultProvider].password,
+  host: dbConfig.providers[defaultProvider].host,
+  dialect: dbConfig.defaultProvider,
 });
 
 export default db;

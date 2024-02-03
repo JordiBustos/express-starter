@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "../db.js";
 import Role from "./Role.model.js";
+
 const User = db.define(
   "Users",
   {
@@ -71,47 +72,9 @@ const User = db.define(
   },
 );
 
-async function userExists(username) {
-  const existingUser = await User.findOne({ where: { username } });
-  return existingUser !== null;
-}
-
 Role.hasMany(User, { foreignKey: "roleId", as: "users" });
 User.belongsTo(Role, { foreignKey: "roleId", as: "role" });
 
 db.sync();
-
-async function insertMockUser() {
-  const mockUser = {
-    id: 0,
-    username: "testuser",
-    password: "testpassword",
-    email: "test@test.com",
-    role: "user",
-    lastLogin: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isActive: false,
-    displayName: "Test User",
-    profileImage: "",
-    isVerified: false,
-  };
-
-  try {
-    await db.authenticate();
-    await db.sync(); // This creates the table if it doesn't exist
-
-    const usernameExists = await userExists(mockUser.username);
-
-    if (!usernameExists) {
-      const result = await User.create(mockUser);
-      console.log(`Inserted user with id: ${result.id}`);
-    } else {
-      console.log(`User with username ${mockUser.username} already exists.`);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 export default User;

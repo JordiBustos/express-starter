@@ -28,11 +28,4 @@ const Role = db.define(
   },
 );
 
-/*
-await Role.create({
-  id: 1,
-  role: "admin",
-  permissions: ["create", "read", "update", "delete"],
-});
-*/
 export default Role;

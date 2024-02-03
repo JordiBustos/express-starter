@@ -32,6 +32,7 @@ export async function createRole(req, res) {
  * @returns {String} 200 roles found or error message
  */
 export async function getAllRoles(req, res) {
+  console.log(req.session);
   try {
     const roles = await Role.findAll();
 
