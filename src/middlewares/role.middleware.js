@@ -70,13 +70,11 @@ export function HasRole(role) {
     const userRole = req.session.role;
 
     if (!username || !userRole) return res.status(401).send("Unauthorized");
-    if (typeof role === "string") {
-      if (userRole !== role) return res.status(403).send("Forbidden");
-    }
+    if (typeof role === "string" && userRole !== role)
+      return res.status(403).send("Forbidden");
 
-    if (Array.isArray(role)) {
-      if (!role.includes(userRole)) return res.status(403).send("Forbidden");
-    }
+    if (Array.isArray(role) && !role.includes(userRole))
+      return res.status(403).send("Forbidden");
 
     return next();
   };

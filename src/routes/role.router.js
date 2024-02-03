@@ -1,21 +1,21 @@
 import { Router } from "express";
 import {
   createRole,
-  getRoleByRoleName,
-  getAllRoles,
-  updateRole,
   deleteRole,
+  getAllRoles,
+  getRoleByRoleName,
+  updateRole,
 } from "../controllers/role.controller.js";
 import {
   validateRoleCreation,
-  validateRoleName,
   validateRoleDelete,
+  validateRoleName,
 } from "../middlewares/role.middleware.js";
 
 import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const roleRouter = Router();
-// roleRouter.use(verifyToken);
+roleRouter.use(verifyToken);
 
 roleRouter.post("/create-role", validateRoleCreation(), createRole);
 roleRouter.get("/get-all-roles", verifyToken, getAllRoles);

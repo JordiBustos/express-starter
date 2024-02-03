@@ -5,9 +5,9 @@ import User from "../models/User.model.js";
 
 /**
  * Verify token continue to next route or return error response
- * @param {Request} req
- * @param {Response} res
- * @param {Function} next
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ * @param {Function} next - the next middleware function
  * @returns {null || Object} null or error response
  */
 export function verifyToken(req, res, next) {

@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import { hashingConfig } from "../../../../config/hashingConfig.js";
 
+/**
+ * Bcrypt Provider for hashing and comparing data asynchronously
+ */
 export default function BcryptProvider() {
   const defaultSaltRounds = hashingConfig.providers.bcrypt.saltRounds;
 

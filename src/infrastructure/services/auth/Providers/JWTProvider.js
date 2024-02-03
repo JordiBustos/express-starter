@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import { authConfig } from "../../../../config/authConfig.js";
 
+/**
+ * JWT Provider
+ * Generate and verify JWT tokens for authentication
+ */
 export default function JWTProvider() {
   const secret = authConfig.providers.jwt.token.secret;
   const expiresIn = authConfig.providers.jwt.token.expiresIn;

@@ -5,8 +5,8 @@ import { generateAccessToken, getUserByUsername } from "../utils/auth.js";
 import CryptoService from "../infrastructure/services/encrypt/CryptoService.js";
 /**
  * Register user controller with username, password and email
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} json web token or error message
  */
 export async function register(req, res) {
@@ -42,8 +42,8 @@ export async function register(req, res) {
 
 /**
  * login user controller with username and password
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} json web token or error message
  */
 export async function login(req, res) {
@@ -80,8 +80,8 @@ export async function login(req, res) {
 
 /**
  * Logout user controller. Remove all tokens in the user Tokens, clear token cookie, and set isActive to false.
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * retrun {Response} 200 if logout is successful else 500
  */
 export async function logout(req, res) {
@@ -101,8 +101,8 @@ export async function logout(req, res) {
 /**
  * TODO add email service to validate code and continue
  * Allows user to reestablish password with email
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  */
 export async function reestablishPassword(req, res) {
   const { email, password } = req.body;
@@ -128,8 +128,8 @@ export async function reestablishPassword(req, res) {
 
 /**
  * Get user account information based on username query param
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  */
 export async function getAccountInformation(req, res) {
   const username = req.params.username;
@@ -144,6 +144,11 @@ export async function getAccountInformation(req, res) {
   }
 }
 
+/**
+ * Update user account information based on username query param
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
 export async function deleteUserByUsername(req, res) {
   const username = req.params.username;
   try {

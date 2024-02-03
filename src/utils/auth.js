@@ -10,6 +10,7 @@ import User from "../models/User.model.js";
  */
 export function generateAccessToken(user) {
   const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
+  if (!user || !user.id) return null;
   const token = AuthService.sign(user);
 
   return {
@@ -24,6 +25,7 @@ export function generateAccessToken(user) {
  * @returns {User} user
  */
 export async function getUserByUsername(username) {
+  if (!username || typeof username === "string") return null;
   try {
     const user = await User.findOne({
       where: { username },

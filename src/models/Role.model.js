@@ -32,7 +32,7 @@ const Role = db.define(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default Role;

@@ -1,6 +1,6 @@
+import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 import { HasRole } from "../middlewares/role.middleware.js";
-import { Router } from "express";
 
 const indexRouter = Router();
 

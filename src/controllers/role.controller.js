@@ -2,8 +2,8 @@ import Role from "../models/Role.model.js";
 
 /**
  * Create role controller with role and permissions
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} 200 role created or error message
  */
 export async function createRole(req, res) {
@@ -27,11 +27,11 @@ export async function createRole(req, res) {
 
 /**
  * Get all roles controller
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} 200 roles found or error message
  */
-export async function getAllRoles(req, res) {
+export async function getAllRoles(_, res) {
   try {
     const roles = await Role.findAll();
 
@@ -48,8 +48,8 @@ export async function getAllRoles(req, res) {
 
 /**
  * Delete role controller
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} 200 role deleted or error message
  */
 export async function deleteRole(req, res) {
@@ -70,8 +70,8 @@ export async function deleteRole(req, res) {
 
 /**
  * Update role controller
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} 200 role updated or error message
  */
 export async function updateRole(req, res) {
@@ -96,8 +96,8 @@ export async function updateRole(req, res) {
 
 /**
  * Get role by role name controller
- * @param {Request} req
- * @param {Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @returns {String} 200 role found or error message
  */
 export async function getRoleByRoleName(req, res) {

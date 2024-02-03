@@ -2,6 +2,12 @@ import rateLimit from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 import { createRedisClient } from "../utils/connectRedis.js";
 
+/**
+ * Create a rate limiter and return it
+ *
+ * return rate limiter
+ * @return {Promise<rateLimit>}
+ */
 async function createLimiter() {
   const client = await createRedisClient();
 

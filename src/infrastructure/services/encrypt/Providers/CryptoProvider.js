@@ -6,6 +6,10 @@ try {
   console.error("crypto support is disabled!");
 }
 
+/**
+ * Crypto Provider for encrypting and decrypting data using the crypto module
+ * Store the encrypted data in the database with the IV prepended to the encrypted data
+ */
 export default function CryptoProvider() {
   if (!crypto) {
     return {

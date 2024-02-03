@@ -4,6 +4,11 @@ import { createClient } from "redis";
 import { redisConfig } from "../config/redisConfig.js";
 import { appConfig } from "../config/appConfig.js";
 
+/**
+ * Create a redis client and return it connected if successful
+ *
+ * return redis client
+ */
 export const createRedisClient = async () => {
   const client = createClient({
     url: redisConfig.redisUrl,
@@ -18,6 +23,10 @@ export const createRedisClient = async () => {
   return client;
 };
 
+/**
+ * Create a redis store and add it to the app as express-session
+ * @param {Express.Application} app
+ */
 export async function createRedisSession(app) {
   const client = await createRedisClient();
   app.locals.client = client;
