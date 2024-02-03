@@ -4,7 +4,9 @@ import cors from "cors";
 import "dotenv/config";
 import express, { json, urlencoded } from "express";
 import logger from "morgan";
+import { createServer } from "node:http";
 import { dirname, join } from "path";
+import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import { appConfig } from "./config/appConfig.js";
 import limiter from "./constants/limiter.js";
@@ -20,6 +22,9 @@ function getDirname() {
 }
 
 async function startCore(app, port) {
+  const server = createServer(app);
+  const io = new Server(server);
+
   await createRedisSession(app);
   if (appConfig.runsBehindProxy) app.set("trust proxy", 1);
 
@@ -31,11 +36,29 @@ async function startCore(app, port) {
   app.use(cookieParser());
   if (appConfig.useCompression) app.use(compression());
 
-  app.use(express.static(join(getDirname(), "public")));
+  const __dirname = getDirname();
 
+  app.use(express.static(join(__dirname, "public")));
+  app.use((_, res, next) => {
+    res.setHeader(
+      "Content-Security-Policy",
+      "script-src 'self' https://cdn.socket.io;",
+    );
+    next();
+  });
   app.use(appConfig.version + "/", indexRouter);
   app.use(appConfig.version + "/auth", authRouter);
   app.use(appConfig.version + "/roles", rolesRouter);
+
+  app.get("/chat", (req, res) => {
+    res.sendFile(__dirname + "/views/chat/index.html");
+  });
+
+  io.on("connection", (socket) => {
+    socket.on("chat message", (msg) => {
+      io.emit("chat message", msg);
+    });
+  });
 
   app.get("/health", (_, res) => {
     res.send("Server is running...");
@@ -67,7 +90,7 @@ async function startCore(app, port) {
   db.authenticate();
   db.sync();
 
-  const server = app.listen(port || appConfig.port);
+  server.listen(port || appConfig.port);
 
   return server;
 }
