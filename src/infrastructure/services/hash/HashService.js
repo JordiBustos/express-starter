@@ -1,7 +1,7 @@
 import { hashingConfig } from "../../../config/hashingConfig.js";
 import BcryptProvider from "./Providers/BcryptProvider.js";
 
-function HashServiceConstructor() {
+function HashServiceFactory() {
   let provider;
 
   switch (hashingConfig.defaultProvider) {
@@ -23,5 +23,5 @@ function HashServiceConstructor() {
   };
 }
 
-const HashService = HashServiceConstructor();
+const HashService = HashServiceFactory();
 export default HashService;

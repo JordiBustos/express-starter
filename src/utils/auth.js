@@ -1,7 +1,5 @@
-import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import { authConfig } from "../config/authConfig.js";
-import HashService from "../infrastructure/services/hash/HashService.js";
+import AuthService from "../infrastructure/services/auth/AuthService.js";
 import Role from "../models/Role.model.js";
 import User from "../models/User.model.js";
 
@@ -12,14 +10,7 @@ import User from "../models/User.model.js";
  */
 export function generateAccessToken(user) {
   const expirationDate = new Date((Date.now() / 1000 + 60 * 60) * 1000); // 1 hour from now
-  const token = jwt.sign(
-    { id: user.id },
-    authConfig.providers[authConfig.defaultProvider].token.secret,
-    {
-      expiresIn:
-        authConfig.providers[authConfig.defaultProvider].token.expiresIn,
-    },
-  );
+  const token = AuthService.sign(user);
 
   return {
     token,

@@ -1,8 +1,7 @@
 import { body, param } from "express-validator";
-import jwt from "jsonwebtoken";
+import AuthService from "../infrastructure/services/auth/AuthService.js";
 import Token from "../models/Token.model.js";
 import User from "../models/User.model.js";
-import { authConfig } from "../config/authConfig.js";
 
 /**
  * Verify token continue to next route or return error response
@@ -24,35 +23,31 @@ export function verifyToken(req, res, next) {
     return res.status(401).send("Access denied. No token provided.");
 
   try {
-    jwt.verify(
-      token,
-      authConfig.providers.jwt.token.secret,
-      async (err, user) => {
-        if (err) return res.status(403).send("Invalid token.");
-        if (user.exp <= Date.now() / 1000) return updateUser(User, user.id);
-        req.user = user;
-        let tokenDb = await Token.findAll({
-          limit: 1, // same as findOne but ordered by createdAt
-          order: [["createdAt", "DESC"]],
-          where: { token, userId: user.id },
-        });
+    AuthService.verify(token, async (err, user) => {
+      if (err) return res.status(403).send("Invalid token.");
+      if (user.exp <= Date.now() / 1000) return updateUser(User, user.id);
+      req.user = user;
+      let tokenDb = await Token.findAll({
+        limit: 1, // same as findOne but ordered by createdAt
+        order: [["createdAt", "DESC"]],
+        where: { token, userId: user.id },
+      });
 
-        if (!tokenDb) return res.status(403).send("Invalid token.");
+      if (!tokenDb) return res.status(403).send("Invalid token.");
 
-        tokenDb = tokenDb[0].dataValues;
+      tokenDb = tokenDb[0].dataValues;
 
-        const matchesIssuedAt =
-          tokenDb.createdAt.getTime() - user.iat * 1000 < 1000; // might be some ms off
-        const expirationDate = tokenDb.createdAt.getTime() + 60 * 60 * 1000;
+      const matchesIssuedAt =
+        tokenDb.createdAt.getTime() - user.iat * 1000 < 1000; // might be some ms off
+      const expirationDate = tokenDb.createdAt.getTime() + 60 * 60 * 1000;
 
-        if (!matchesIssuedAt || Date.now() > expirationDate) {
-          await Token.destroy({ where: { token } });
-          return updateUser(User, user.id);
-        }
+      if (!matchesIssuedAt || Date.now() > expirationDate) {
+        await Token.destroy({ where: { token } });
+        return updateUser(User, user.id);
+      }
 
-        next();
-      },
-    );
+      next();
+    });
   } catch (error) {
     return res.status(400).send("Invalid token.");
   }

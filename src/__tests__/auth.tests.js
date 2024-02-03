@@ -72,13 +72,13 @@ describe("Authentication endpoints", () => {
 
   describe("POST /auth/register and DELETE /auth/delete-user/:username", () => {
     it("should return a 201 status code", async () => {
-      const username = "userdemo";
+      const username = "userdemo123";
       const result = await request(app)
         .post(appConfig.version + "/auth/register")
         .send({
           username: username,
           password: "testpassword",
-          email: "unique@unique.com",
+          email: "very_unique@unique.com",
         });
       expect(result.status).toBe(201);
       expect(result.body).toHaveProperty("token");
