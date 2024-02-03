@@ -1,8 +1,8 @@
 # Node Starter Project
 
-Welcome to the Node Starter Project! This project is designed to provide you with a solid foundation for building an Express.js site with pre-configured authentication/authorization processes, database models, and optional role-based access control.
+Welcome to the Node Starter Project! This project is designed to provide you with a solid foundation for building an Express.js site with pre-configured authentication/authorization processes with JWT, database models, and role-based access control.
 
-This project follows the MVC pattern, uses redis for caching and postgresql as database.
+This project follows the MVC pattern, uses redis for caching/express-session storage, postgresql as database, bcrypt for hashing, jest for testing.
 
 ## Installation
 
