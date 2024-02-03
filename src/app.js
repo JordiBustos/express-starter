@@ -1,12 +1,14 @@
 import express from "express";
 import helmet from "helmet";
 import startCore from "./startCore.js";
+import { validateContentType } from "./middlewares/security.js";
 
 var app = express();
 startCore(app);
 
 // security
 app.use(helmet());
+app.use(validateContentType);
 app.disable("x-powered-by");
 app.use((_, res, next) => {
   res.setHeader("Content-Type", "application/json"); // Change 'application/json' to the relevant MIME type for your application.
