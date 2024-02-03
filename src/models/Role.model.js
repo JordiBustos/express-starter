@@ -1,10 +1,17 @@
 import { DataTypes } from "sequelize";
-
 import db from "../db.js";
 
 const Role = db.define(
   "role",
   {
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      unique: true,
+      field: "uuid",
+      comment: "Role UUID",
+    },
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -25,7 +32,7 @@ const Role = db.define(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export default Role;

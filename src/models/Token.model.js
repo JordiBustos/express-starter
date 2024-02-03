@@ -5,6 +5,12 @@ import db from "../db.js";
 const Token = db.define(
   "Token",
   {
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      unique: true,
+    },
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,

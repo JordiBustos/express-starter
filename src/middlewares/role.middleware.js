@@ -8,12 +8,23 @@ import Role from "../models/Role.model.js";
  */
 export function validateRoleCreation() {
   return [
-    body("role").exists().withMessage("Role is required").trim().notEmpty(),
+    body("role")
+      .exists()
+      .withMessage("Role is required")
+      .trim()
+      .notEmpty()
+      .escape(),
     body("permissions")
       .exists()
       .withMessage("Permissions is required")
       .isArray()
-      .notEmpty(),
+      .notEmpty()
+      .custom((permissions) => {
+        permissions.forEach((permission) => {
+          if (!appConfig.permissions.includes(permission))
+            throw new Error("Invalid permission");
+        });
+      }),
   ];
 }
 
@@ -22,7 +33,14 @@ export function validateRoleCreation() {
  * @returns {Array} array of validation rules
  */
 export function validateRoleDelete() {
-  return [param("id").exists().withMessage("Id is required").trim().notEmpty()];
+  return [
+    param("id")
+      .exists()
+      .withMessage("Id is required")
+      .trim()
+      .notEmpty()
+      .escape(),
+  ];
 }
 
 /**
@@ -31,7 +49,12 @@ export function validateRoleDelete() {
  */
 export function validateRoleName() {
   return [
-    param("role").exists().withMessage("Role is required").trim().notEmpty(),
+    param("role")
+      .exists()
+      .withMessage("Role is required")
+      .trim()
+      .notEmpty()
+      .escape(),
   ];
 }
 

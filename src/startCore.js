@@ -38,7 +38,8 @@ async function startCore(app, port) {
 
   const __dirname = getDirname();
 
-  app.use(express.static(join(__dirname, "public")));
+  // index false for security reasons
+  app.use(express.static(join(__dirname, "public"), { index: false }));
   app.use((_, res, next) => {
     res.setHeader(
       "Content-Security-Policy",

@@ -15,7 +15,7 @@ import {
 import { verifyToken } from "../middlewares/auth.middleware.js";
 
 const roleRouter = Router();
-roleRouter.use(verifyToken);
+// roleRouter.use(verifyToken);
 
 roleRouter.post("/create-role", validateRoleCreation(), createRole);
 roleRouter.get("/get-all-roles", verifyToken, getAllRoles);

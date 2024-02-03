@@ -5,6 +5,14 @@ import Role from "./Role.model.js";
 const User = db.define(
   "Users",
   {
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+      unique: true,
+      field: "uuid",
+      comment: "User UUID",
+    },
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,

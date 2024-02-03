@@ -2,7 +2,7 @@ import HashService from "../infrastructure/services/hash/HashService.js";
 import Token from "../models/Token.model.js";
 import User from "../models/User.model.js";
 import { generateAccessToken, getUserByUsername } from "../utils/auth.js";
-
+import CryptoService from "../infrastructure/services/encrypt/CryptoService.js";
 /**
  * Register user controller with username, password and email
  * @param {Request} req
@@ -17,11 +17,14 @@ export async function register(req, res) {
     if (userExists) return res.status(400).send("User already exists");
     req.session.role = "user";
     req.session.username = username;
+
     const hashedPassword = await HashService.make(String(password));
+    const encryptedEmail = CryptoService.encrypt(String(email).toLowerCase());
+
     const user = await User.create({
       username,
       password: hashedPassword,
-      email: email.toLowerCase(),
+      email: encryptedEmail,
       roleId: 2, // default role
     });
 
@@ -103,13 +106,17 @@ export async function logout(req, res) {
  */
 export async function reestablishPassword(req, res) {
   const { email, password } = req.body;
+  const encryptedEmail = CryptoService.encrypt(String(email).toLowerCase());
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email: encryptedEmail } });
     if (!user) return res.status(404).send("User not found");
 
     const hashedPassword = await HashService.make(String(password));
-    await User.update({ password: hashedPassword }, { where: { email } });
+    await User.update(
+      { password: hashedPassword },
+      { where: { email: encryptedEmail } },
+    );
 
     const response = generateAccessToken(user);
     res.status(200).json(response);

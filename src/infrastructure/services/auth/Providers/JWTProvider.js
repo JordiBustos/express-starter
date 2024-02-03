@@ -12,8 +12,9 @@ export default function JWTProvider() {
           id: payload.id,
         },
         secret,
-        { expiresIn },
+        { expiresIn, algorithm: "HS256" },
       ),
-    verify: (token, callback) => jwt.verify(token, secret, callback),
+    verify: (token, callback) =>
+      jwt.verify(token, secret, { algorithm: "HS256" }, callback),
   };
 }
