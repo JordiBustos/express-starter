@@ -1,8 +1,9 @@
 import { createClient } from "redis";
+import { redisConfig } from "../config/redisConfig.js";
 
 const createRedisClient = async () => {
   const client = createClient({
-    url: process.env.REDIS_URL,
+    url: redisConfig.redisUrl,
   });
 
   client.on("error", (err) => {

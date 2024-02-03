@@ -8,6 +8,7 @@ import session from "express-session";
 import logger from "morgan";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import { appConfig } from "./config/appConfig.js";
 import limiter from "./constants/limiter.js";
 import db from "./db.js";
 import authRouter from "./routes/auth.router.js";
@@ -15,48 +16,50 @@ import indexRouter from "./routes/index.js";
 import rolesRouter from "./routes/role.router.js";
 import createRedisClient from "./utils/connectRedis.js";
 
-async function startCore(app, port) {
+function getDirname() {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
+  return __dirname;
+}
 
+async function startCore(app, port) {
   const client = await createRedisClient();
   app.locals.client = client;
   let redisStore = new RedisStore({
     client: client,
-    prefix: "node-starter-redis",
+    prefix: appConfig.name,
   });
   app.use(
     session({
       store: redisStore,
-      secret: process.env.SESSION_SECRET,
+      secret: appConfig.sessionSecret,
       resave: false,
       saveUninitialized: true,
       name: "redisSession",
       cookie: {
-        secure: true,
-        domain: process.env.ALLOWED_DOMAIN,
-        httpOnly: true,
+        secure: false,
+        // domain: appConfig.allowedDomain,
+        httpOnly: false,
         maxAge: 1000 * 60 * 10,
       },
     }),
   );
 
-  // enable this if you run behind a proxy (e.g. nginx)
-  // app.set('trust proxy', 1);
+  if (appConfig.runsBehindProxy) app.set("trust proxy", 1);
 
-  app.use(limiter);
+  if (appConfig.useLimiter) app.use(limiter);
   app.use(cors());
   app.use(logger("dev"));
   app.use(json());
   app.use(urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(compression());
+  if (appConfig.useCompression) app.use(compression());
 
-  app.use(express.static(join(__dirname, "public")));
+  app.use(express.static(join(getDirname(), "public")));
 
-  app.use("/", indexRouter);
-  app.use("/auth", authRouter);
-  app.use("/roles", rolesRouter);
+  app.use(appConfig.version + "/", indexRouter);
+  app.use(appConfig.version + "/auth", authRouter);
+  app.use(appConfig.version + "/roles", rolesRouter);
 
   app.get("/health", (_, res) => {
     res.send("Server is running...");
@@ -80,7 +83,7 @@ async function startCore(app, port) {
     res.status(404).send("Not found");
   });
 
-  app.use((err, req, res) => {
+  app.use((err, _, res) => {
     console.eror(err.stack);
     res.status(500).send("Internal server error");
   });
@@ -88,7 +91,7 @@ async function startCore(app, port) {
   db.authenticate();
   db.sync();
 
-  const server = app.listen(port || process.env.PORT, async () => {
+  const server = app.listen(port || appConfig.port, async () => {
     try {
       console.log("Server is running on port:", server.address().port);
     } catch (err) {
