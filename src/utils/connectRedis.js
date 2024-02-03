@@ -1,7 +1,10 @@
+import RedisStore from "connect-redis";
+import session from "express-session";
 import { createClient } from "redis";
 import { redisConfig } from "../config/redisConfig.js";
+import { appConfig } from "../config/appConfig.js";
 
-const createRedisClient = async () => {
+export const createRedisClient = async () => {
   const client = createClient({
     url: redisConfig.redisUrl,
   });
@@ -15,4 +18,27 @@ const createRedisClient = async () => {
   return client;
 };
 
-export default createRedisClient;
+export async function createRedisSession(app) {
+  const client = await createRedisClient();
+  app.locals.client = client;
+  let redisStore = new RedisStore({
+    client: client,
+    prefix: appConfig.name,
+  });
+
+  app.use(
+    session({
+      store: redisStore,
+      secret: appConfig.sessionSecret,
+      resave: false,
+      saveUninitialized: true,
+      name: "redisSession",
+      cookie: {
+        secure: false,
+        // domain: appConfig.allowedDomain,
+        httpOnly: false,
+        maxAge: 1000 * 60 * 10,
+      },
+    }),
+  );
+}

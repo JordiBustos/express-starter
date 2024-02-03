@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
-import createRedisClient from "../utils/connectRedis.js";
+import { createRedisClient } from "../utils/connectRedis.js";
 
 async function createLimiter() {
   const client = await createRedisClient();

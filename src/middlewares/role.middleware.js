@@ -1,6 +1,6 @@
 import { body, param } from "express-validator";
 import { appConfig } from "../config/appConfig.js";
-import Role from "../models/role.model.js";
+import Role from "../models/Role.model.js";
 
 /**
  * Validate role creation POST request
@@ -45,11 +45,8 @@ export function HasRole(role) {
   return function validatePermissions(req, res, next) {
     const username = req.session.username;
     const userRole = req.session.role;
-    console.log(req.session);
-    console.log(username, userRole);
 
     if (!username || !userRole) return res.status(401).send("Unauthorized");
-    console.log("aaaaaaaaaaaaaaaaaaaa");
     if (typeof role === "string") {
       if (userRole !== role) return res.status(403).send("Forbidden");
     }

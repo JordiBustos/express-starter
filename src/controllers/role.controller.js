@@ -20,7 +20,7 @@ export async function createRole(req, res) {
 
     res.status(201).json({ message: "Role created", newRole });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 }
@@ -32,7 +32,6 @@ export async function createRole(req, res) {
  * @returns {String} 200 roles found or error message
  */
 export async function getAllRoles(req, res) {
-  console.log(req.session);
   try {
     const roles = await Role.findAll();
 

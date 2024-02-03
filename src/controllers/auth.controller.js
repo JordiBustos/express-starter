@@ -1,11 +1,7 @@
-import { compareSync } from "bcrypt";
+import HashService from "../infrastructure/services/hash/HashService.js";
 import Token from "../models/Token.model.js";
 import User from "../models/User.model.js";
-import {
-  generateAccessToken,
-  generateHashedPassword,
-  getUserByUsername,
-} from "../utils/auth.js";
+import { generateAccessToken, getUserByUsername } from "../utils/auth.js";
 
 /**
  * Register user controller with username, password and email
@@ -15,16 +11,16 @@ import {
  */
 export async function register(req, res) {
   const { username, password, email } = req.body;
-  req.session.username = username;
-  req.session.role = "user";
 
   try {
     const userExists = await getUserByUsername(username);
     if (userExists) return res.status(400).send("User already exists");
-
+    req.session.role = "user";
+    req.session.username = username;
+    const hashedPassword = await HashService.make(String(password));
     const user = await User.create({
       username,
-      password: generateHashedPassword(password),
+      password: hashedPassword,
       email: email.toLowerCase(),
       roleId: 2, // default role
     });
@@ -52,8 +48,8 @@ export async function login(req, res) {
   req.session.username = username;
   try {
     const user = await getUserByUsername(username);
-    if (!user) return res.status(404).send("User not found");
-    const isValidPassword = compareSync(password, user.password);
+    if (user === null) return res.status(404).send("User not found");
+    const isValidPassword = await HashService.compare(password, user.password);
     if (!isValidPassword) return res.status(401).send("Invalid password");
 
     await User.update(
@@ -62,8 +58,6 @@ export async function login(req, res) {
     );
 
     req.session.role = user.role.role;
-
-    console.log(req.session);
 
     const response = generateAccessToken(user);
     await Token.create({
@@ -114,7 +108,7 @@ export async function reestablishPassword(req, res) {
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).send("User not found");
 
-    const hashedPassword = generateHashedPassword(password);
+    const hashedPassword = await HashService.make(String(password));
     await User.update({ password: hashedPassword }, { where: { email } });
 
     const response = generateAccessToken(user);
