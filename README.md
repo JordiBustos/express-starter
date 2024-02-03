@@ -2,7 +2,7 @@
 
 Welcome to the Node Starter Project! This project is designed to provide you with a solid foundation for building an Express.js site with pre-configured authentication/authorization processes with JWT, database models, and role-based access control.
 
-This project follows the MVC pattern, uses redis for caching/express-session storage, postgresql as database, bcrypt for hashing, jest for testing.
+This project follows the MVC pattern, uses redis for caching/express-session storage, postgresql as database, bcrypt for hashing, jest for testing and socket.io.
 
 ## Installation
 
