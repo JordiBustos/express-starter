@@ -1,6 +1,6 @@
 # Node Starter Project
 
-Bienvenido al Node Starter Project! Este proyecto está diseñado para proporcionarte una base sólida para construir un sitio Express.js con procesos de autenticación/autorización preconfigurados con JWT, modelos de base de datos y control de acceso basado en roles.
+Bienvenido al Express Starter Project! Este proyecto está diseñado para proporcionarte una base sólida para construir un sitio Express.js con procesos de autenticación/autorización preconfigurados con JWT, modelos de base de datos y control de acceso basado en roles.
 
 Este proyecto sigue el patrón MVCutiliza
 
