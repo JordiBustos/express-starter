@@ -15,6 +15,7 @@ This project follows the MVC pattern.
 - Crypto with AES for encrypting data
 - JWT for authentication
 - Docker for containerization
+- node-cron for scheduling tasks
 
 ## Installation
 

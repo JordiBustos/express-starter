@@ -2,6 +2,7 @@ import express from "express";
 import helmet from "helmet";
 import startCore from "./startCore.js";
 import { validateContentType } from "./middlewares/security.js";
+import deleteTokenJob from "./cron-jobs/delete-tokens.js";
 
 var app = express();
 startCore(app);
@@ -20,3 +21,6 @@ app.use((_, res, next) => {
   );
   next();
 });
+
+// start cron jobs
+deleteTokenJob.start();

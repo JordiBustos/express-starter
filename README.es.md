@@ -15,6 +15,7 @@ Este proyecto sigue el patrón MVCutiliza
 - Crypto con AES para encriptar datos
 - JWT para autenticación
 - Docker para contenerización
+- node-cron para programar tareas
 
 ## Instalación
 
