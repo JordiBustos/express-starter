@@ -3,6 +3,7 @@ import Token from "../models/Token.model.js";
 import User from "../models/User.model.js";
 import { generateAccessToken, getUserByUsername } from "../utils/auth.js";
 import CryptoService from "../infrastructure/services/encrypt/CryptoService.js";
+
 /**
  * Register user controller with username, password and email
  * @param {Express.Request} req
@@ -57,7 +58,7 @@ export async function login(req, res) {
 
     await User.update(
       { lastLogin: new Date(), isActive: true },
-      { where: { username } },
+      { where: { username } }
     );
 
     req.session.role = user.role.role;
@@ -115,7 +116,7 @@ export async function reestablishPassword(req, res) {
     const hashedPassword = await HashService.make(String(password));
     await User.update(
       { password: hashedPassword },
-      { where: { email: encryptedEmail } },
+      { where: { email: encryptedEmail } }
     );
 
     const response = generateAccessToken(user);
